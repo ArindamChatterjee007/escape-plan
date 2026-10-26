@@ -1,0 +1,16 @@
+{
+  "name": "escape-plan",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Vietnam × Bali budget squad-trip planner — static site in docs/, tests in tests/ (run in GitHub Actions)",
+  "scripts": {
+    "test:syntax": "for f in docs/js/*.js docs/data/*.js; do node --check \"$f\" || exit 1; done",
+    "test:data": "node tests/validate-data.js",
+    "test:links": "node tests/check-links.js",
+    "test:e2e": "playwright test",
+    "test": "npm run test:syntax && npm run test:data && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.1"
+  }
+}

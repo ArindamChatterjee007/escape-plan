@@ -1,0 +1,83 @@
+name: Test site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * 1" # weekly — catches dead images/videos/links
+
+permissions:
+  contents: read
+
+jobs:
+  data-and-links:
+    name: Syntax, data schema & link checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: JavaScript syntax
+        run: for f in docs/js/*.js docs/data/*.js; do node --check "$f"; done
+      - name: Data schema + plan-number consistency
+        run: node tests/validate-data.js
+      - name: Images, videos, CDN & external links
+        run: node tests/check-links.js
+
+  e2e:
+    name: End-to-end (Chromium, desktop + mobile)
+    runs-on: ubuntu-latest
+    needs: data-and-links
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install Playwright
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+      - name: Run end-to-end tests against this commit
+        run: npx playwright test
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: screenshots/
+          if-no-files-found: ignore
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+
+  live-site:
+    name: Smoke-test the live GitHub Pages site
+    runs-on: ubuntu-latest
+    needs: e2e
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    env:
+      BASE_URL: https://arindamchatterjee007.github.io/escape-plan/
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+      - run: npx playwright test
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-site-screenshots
+          path: screenshots/
+          if-no-files-found: ignore

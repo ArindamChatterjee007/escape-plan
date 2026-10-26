@@ -244,7 +244,7 @@
           <p>Scroll sideways. Prices are typical street/warung prices (est.) — the single biggest way this trip stays cheap.</p>
         </div>
         <div class="food-scroller reveal">
-          ${D.places.flatMap((p) => (p.food || []).map((f) => { const i = n++; return `<div class="dish card glass">${pic(f.imgKey || fallback[i % fallback.length], i % 2, f.dish)}<div class="b"><h4>${h(f.dish)}</h4><div class="pr">${U.fmt(f.priceInr)}</div><p>📍 ${h(f.where)} · ${h(p.name)}</p></div></div>`; })).join("")}
+          ${D.places.flatMap((p) => (p.food || []).map((f) => { const i = n++; return `<div class="dish card glass">${pic(f.imgKey || fallback[i % fallback.length], i % 2, f.dish)}<div class="b"><h4>${h(f.dish)}</h4><div class="pr">${f.priceInr ? U.fmt(f.priceInr) : "Included"}</div><p>📍 ${h(f.where)} · ${h(p.name)}</p></div></div>`; })).join("")}
         </div>
       </div>
     </section>`;
