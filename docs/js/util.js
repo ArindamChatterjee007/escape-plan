@@ -39,10 +39,11 @@
     tab: "overview",
     month: "Jun",
     origin: "CCU",
+    originBy: { vietnam: "CCU", bali: "BLR" },
     style: "budget",
     people: 3,
     includeFlights: true,
-    startDate: { vietnam: "2027-06-19", bali: "2027-05-29" },
+    startDate: { vietnam: "2027-06-19", bali: "2027-06-12" },
     days: { vietnam: 10, bali: 9 },
     locked: null,
     packing: {},
@@ -51,6 +52,7 @@
   try { state = Object.assign({}, defaults, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch { state = { ...defaults }; }
   state.startDate = Object.assign({}, defaults.startDate, state.startDate || {});
   state.days = Object.assign({}, defaults.days, state.days || {});
+  state.originBy = Object.assign({}, defaults.originBy, state.originBy || {});
   const save = () => localStorage.setItem(KEY, JSON.stringify(state));
 
   // Count-up animation for numbers
@@ -61,6 +63,8 @@
     counters.set(node, target);
     const fmtN = (v) => prefix + (decimals ? v.toFixed(decimals) : Math.round(v).toLocaleString("en-IN")) + suffix;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { node.textContent = fmtN(target); return; }
+    // Fallback: if rAF is throttled (background tab), still settle on the final value
+    setTimeout(() => { if (counters.get(node) === target) node.textContent = fmtN(target); }, dur + 80);
     function step(now) {
       const t = clamp((now - t0) / dur, 0, 1);
       const e = 1 - Math.pow(1 - t, 3);
@@ -108,7 +112,7 @@
     const dailySum = daily.stay + daily.food + daily.transport + daily.activities;
     const extras = (D.extras || []).reduce((s, e) => s + (typeof e.v === "number" ? e.v : e.v[style]), 0);
     const f = cheapestFlight(D.id, origin, month);
-    const flight = includeFlights && f ? (style === "budget" ? f.low : Math.round((f.low + f.typical) / 2)) : 0;
+    const flight = includeFlights && f ? (style === "budget" ? f.low : f.typical) : 0;
     const parts = {
       flights: flight,
       stay: daily.stay * days,
