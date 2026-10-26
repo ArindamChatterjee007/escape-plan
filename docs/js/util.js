@@ -23,11 +23,13 @@
     return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='rgb(${r},${g},${b})' stop-opacity='.55'/><stop offset='1' stop-color='#0b0f1a'/></linearGradient></defs><rect width='800' height='600' fill='url(#g)'/></svg>`)}`;
   };
 
-  // Image lookup: key from data/images.js, index i; graceful fallback
+  // Image lookup: key from data/images.js, index i; prefers entries with a verified url
   function img(key, i = 0, w) {
     const list = (window.IMAGES && window.IMAGES[key]) || [];
-    const item = list[i % Math.max(list.length, 1)];
-    if (!item) return { url: PLACEHOLDER(key ? key.length : 0), alt: key || "" };
+    const withUrl = list.filter((it) => it && it.url);
+    const pool = withUrl.length ? withUrl : list;
+    const item = pool[i % Math.max(pool.length, 1)];
+    if (!item || !item.url) return { url: PLACEHOLDER(key ? key.length : 0), alt: (item && item.alt) || key || "" };
     let url = item.url;
     if (w && /images\.unsplash\.com/.test(url)) url = url.replace(/([?&])w=\d+/, `$1w=${w}`);
     return { url, alt: item.alt || key };
