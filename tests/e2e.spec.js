@@ -58,6 +58,9 @@ test.describe("Escape Plan", () => {
     expect(await page.locator("[data-when-detail] .cal .dy.cheap").count()).toBeGreaterThanOrEqual(2);
     await page.locator('#whenBox .mo[data-m="Jun"]').first().click();
     await expect(page.locator("[data-when-detail] h3")).toContainText("June 2027");
+    await page.locator("#when").scrollIntoViewIfNeeded();
+    await page.waitForTimeout(900);
+    await page.screenshot({ path: `${SHOTS}/11-when-to-go.png` });
     // THE PLAN shows both plans and switching one re-prices the site
     await expect(page.locator(".plan-tier")).toHaveCount(2);
     await page.locator('.plan-tier[data-style="mid"]').click();
@@ -107,6 +110,12 @@ test.describe("Escape Plan", () => {
     await expect(p.locator('.day[data-day="1"] .pp')).not.toHaveText(ppBudget);
     expect(await p.locator(".tier-note").count()).toBeGreaterThanOrEqual(5);
     expect(await p.locator(".stay.picked .pick-badge", { hasText: /comfort/i }).count()).toBeGreaterThanOrEqual(5);
+    await p.locator("#vietnam-itinerary").scrollIntoViewIfNeeded();
+    await page.waitForTimeout(700);
+    await page.screenshot({ path: `${SHOTS}/12-vietnam-itinerary-comfort.png` });
+    await p.locator("#vietnam-top .tier-switch").scrollIntoViewIfNeeded();
+    await page.waitForTimeout(500);
+    await page.screenshot({ path: `${SHOTS}/13-vietnam-hero-comfort.png` });
     await expect(page.locator(".plan-tier.active")).toHaveAttribute("data-style", "mid"); // THE PLAN card follows the global switch
     await p.locator('.calc [data-seg="style"] button[data-v="budget"]').click();
     await expect(p.locator('.day[data-day="1"] .sleep')).toHaveText(sleepBudget);
