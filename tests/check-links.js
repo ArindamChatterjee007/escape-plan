@@ -3,7 +3,7 @@
 // Hard failures: Unsplash images, YouTube video IDs (oEmbed) + thumbnails, Leaflet CDN, map tiles, Google Fonts.
 // Soft (warn only): booking/search/social links — many of those sites block bots, so we only report.
 const { loadSite } = require("./load-site");
-const { IMAGES, VIDEOS, FLIGHTS, VIETNAM, BALI } = loadSite();
+const { IMAGES, VIDEOS, CLIPS, FLIGHTS, VIETNAM, BALI } = loadSite();
 
 const TIMEOUT = 15000;
 const UA = "Mozilla/5.0 (compatible; EscapePlanLinkCheck/1.0; +https://github.com/ArindamChatterjee007/escape-plan)";
@@ -12,6 +12,11 @@ async function probe(url, method = "HEAD") {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), TIMEOUT);
   try {
+    if (method === "RANGE") { // first byte of a media file: 206 (or 200) proves it streams
+      const res = await fetch(url, { method: "GET", redirect: "follow", signal: ctrl.signal, headers: { "user-agent": UA, range: "bytes=0-0" } });
+      try { res.body && res.body.cancel && res.body.cancel(); } catch { /* noop */ }
+      return res.status === 206 ? 200 : res.status;
+    }
     let res = await fetch(url, { method, redirect: "follow", signal: ctrl.signal, headers: { "user-agent": UA, accept: "*/*" } });
     if (method === "HEAD" && (res.status === 405 || res.status === 403 || res.status === 400)) res = await fetch(url, { method: "GET", redirect: "follow", signal: ctrl.signal, headers: { "user-agent": UA, accept: "*/*" } });
     return res.status;
@@ -34,6 +39,7 @@ async function pool(items, worker, size = 8) {
     hard.set(`https://www.youtube.com/oembed?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D${v.id}&format=json`, `video ${k} ${v.id}`);
     hard.set(v.thumb, `thumb ${v.id}`);
   }
+  for (const c of CLIPS || []) { hard.set(c.src, `clip ${c.id} src`); if (c.srcHd) hard.set(c.srcHd, `clip ${c.id} srcHd`); hard.set(c.poster, `clip ${c.id} poster`); }
   hard.set("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js", "leaflet js");
   hard.set("https://unpkg.com/leaflet@1.9.4/dist/leaflet.css", "leaflet css");
   hard.set("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/6/28/51", "map tile base");
@@ -52,7 +58,7 @@ async function pool(items, worker, size = 8) {
   }
 
   console.log(`Checking ${hard.size} critical assets and ${soft.size} external links…`);
-  const hardRes = await pool([...hard.entries()], async ([u, label]) => [u, label, await probe(u)], 8);
+  const hardRes = await pool([...hard.entries()], async ([u, label]) => [u, label, await probe(u, /\.mp4$/.test(u) ? "RANGE" : "HEAD")], 8);
   const hardFail = hardRes.filter(([, , s]) => s !== 200);
   const softRes = await pool([...soft.entries()], async ([u, label]) => [u, label, await probe(u, "GET")], 6);
   const softBad = softRes.filter(([, , s]) => typeof s !== "number" || s >= 400);

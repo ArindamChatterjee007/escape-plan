@@ -259,8 +259,9 @@
       <div class="container">
         <div class="section-head reveal">
           <div><span class="eyebrow">Fly for less</span><h2>Cheapest <em>flights</em> from India</h2></div>
-          <p>Return fares per person (est.) for May–July 2027. "Low" is what sale fares usually hit; "typical" is what you'll see without a sale. Track now, buy on a sale.</p>
+          <p>Return fares per person for May–July 2027. "Low" is what sale fares usually hit; "typical" is what you'll see without a sale. Track now, buy on a sale.</p>
         </div>
+        <div class="notice reveal"><span class="ic">⚠️</span><div><b>Flight prices are NOT final — I could not find live 2027 fares.</b> Airlines only open bookings ~11 months ahead and fare sites block automated checks, so every flight figure here is an estimate from past fares and sale patterns. Nothing has been booked. Use the Google Flights / Skyscanner buttons to see real prices before deciding.</div></div>
         <div class="flights-grid stagger">
           ${opts.map((o, i) => `<div class="flight card glass tilt">
             <div class="hdr"><div><div class="route">${o.from}<i>→</i>${o.to}</div><div class="airline">${h(o.airline)}</div></div>${i === 0 ? `<span class="best">Cheapest</span>` : ""}</div>
@@ -284,22 +285,36 @@
   }
 
   function watch(D) {
+    const clips = (window.CLIPS || []).filter((c) => c.dest === D.id);
+    const byPlace = [];
+    D.places.forEach((p) => { const cs = clips.filter((c) => c.place === p.id); if (cs.length) byPlace.push({ p, cs }); });
     const V = window.VIDEOS || {};
-    const groups = Object.keys(V).filter((k) => !k.startsWith("_") && V[k].dest === D.id);
+    const vlogs = Object.keys(V).filter((k) => !k.startsWith("_") && V[k].dest === D.id).map((k) => ({ k, g: V[k], v: V[k].videos[0] }));
     return `
     <section class="section" id="${D.id}-watch" style="padding-top:0">
       <div class="container">
         <div class="section-head reveal">
-          <div><span class="eyebrow">Watch before you go</span><h2>Real <em>vlogs</em>, cinema mode</h2></div>
-          <p>Verified videos — several by Indian travellers who did this exact trip on a budget. Plays in our own player with an "up next" rail.</p>
+          <div><span class="eyebrow">Cinema · ad-free</span><h2>Watch it in <em>our player</em></h2></div>
+          <p>${clips.length} cinematic clips of the exact places on our route — free-licence footage streamed in our own player. <b>No YouTube, no ads, ever.</b> Hover to preview, click for cinema mode; it plays on to the next clip.</p>
+        </div>
+        <div class="reveal" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px">
+          <button class="btn primary" data-cinema="${D.id}" data-cinema-i="0">▶ Play the whole ${h(D.name)} reel</button>
+          ${chip("🚫 ad-free", "accent")}${chip("🎬 " + clips.length + " clips")}${chip("⌨️ space · ← → · F · M")}
         </div>
         <div class="yt-grid stagger">
-          ${groups.map((k) => { const v = V[k].videos[0]; return `<div class="yt" data-cinema="${k}" data-cinema-i="0" role="button" tabindex="0" aria-label="Play ${h(v.title)}">
-            <img src="${v.thumb}" alt="${h(v.title)}" loading="lazy"><div class="play"><i>▶</i></div>
-            <div class="cap"><span class="ch">${h(V[k].label)}</span><b>${h(v.title)}</b><span class="by">${h(v.channel)} · ${V[k].videos.length} videos</span></div>
+          ${byPlace.map(({ p, cs }) => { const c = cs[0]; const i = clips.indexOf(c); return `<div class="yt clip" data-cinema="${D.id}" data-cinema-i="${i}" role="button" tabindex="0" aria-label="Play ${h(p.name)} clips">
+            <img src="${c.poster}" alt="${h(c.title)}" loading="lazy" data-tags="${h(p.name)}">
+            <video class="peek" muted playsinline loop preload="none" src="${c.src}" aria-hidden="true"></video>
+            <div class="play"><i>▶</i></div>
+            <div class="cap"><span class="ch">${h(p.name)} · ${cs.length} clip${cs.length > 1 ? "s" : ""}</span><b>${h(c.title)}</b><span class="by">${h(c.credit)} · free licence · ad-free</span></div>
           </div>`; }).join("")}
         </div>
+        <div class="section-head reveal" style="margin-top:46px"><div><span class="eyebrow">Creator vlogs</span><h2>Real trips, <em>on YouTube</em></h2></div>
+          <p>Verified vlogs (several by Indian travellers doing this exact trip). These open on YouTube in a new tab — we don't embed YouTube, so any ads there are YouTube's, never ours.</p></div>
         <div class="social-grid stagger">
+          ${vlogs.map(({ k, g, v }) => `<a class="social card glass vlog" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener"><img class="vthumb" src="${v.thumb}" alt="" loading="lazy"><div><div class="tiny" style="letter-spacing:.15em;text-transform:uppercase;font-weight:800;color:var(--accent)">${h(g.label)}</div><h4>${h(v.title)}</h4><p>${h(v.channel)} · ${g.videos.length} videos in this set</p><span class="lnk">Watch on YouTube ↗</span></div></a>`).join("")}
+        </div>
+        <div class="social-grid stagger" style="margin-top:16px">
           ${(D.social || []).map((s) => `<a class="social card glass" href="${s.url}" target="_blank" rel="noopener"><div class="pf ${h(s.type)}">${{ youtube: "▶", instagram: "IG", reddit: "r/", blog: "✎", tiktok: "♪" }[s.type] || "↗"}</div><div><h4>${h(s.title)}</h4><p>${h(s.desc || "")}</p><span class="lnk">Open ${h(s.type)} ↗</span></div></a>`).join("")}
         </div>
       </div>
@@ -513,6 +528,11 @@
       const open = () => window.APP && APP.openCinema(n.dataset.cinema, Number(n.dataset.cinemaI || 0));
       n.addEventListener("click", open);
       n.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
+      const peek = n.querySelector("video.peek");
+      if (peek && window.matchMedia("(hover:hover)").matches) {
+        n.addEventListener("pointerenter", () => { peek.currentTime = 0; const pr = peek.play(); if (pr && pr.catch) pr.catch(() => {}); n.classList.add("peeking"); });
+        n.addEventListener("pointerleave", () => { peek.pause(); n.classList.remove("peeking"); });
+      }
     });
   }
 

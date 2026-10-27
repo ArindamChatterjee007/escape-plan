@@ -821,3 +821,58 @@ a.tip { text-decoration: none; display: block; }
 /* Anchored sections land below the sticky nav (+ subnav inside destination panels) */
 #plan, #compare, #combo, #choose { scroll-margin-top: calc(var(--nav-h) + 30px); }
 [role="tabpanel"] section[id] { scroll-margin-top: calc(var(--nav-h) + 96px); }
+
+/* ============================================================
+   --- added: ad-free HTML5 cinema player, clip cards, notice ---
+   ============================================================ */
+.notice { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start; padding: 16px 18px; border-radius: 18px; margin-bottom: 22px; background: rgba(251, 191, 36, 0.08); border: 1px solid rgba(251, 191, 36, 0.4); color: var(--text-2); font-size: 14px; }
+.notice .ic { font-size: 22px; line-height: 1; }
+.notice b { color: var(--text); }
+
+.yt.clip video.peek { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.5s; pointer-events: none; }
+.yt.clip.peeking video.peek { opacity: 1; }
+.yt.clip.peeking img { opacity: 0; }
+.yt .play i { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #0a0b10; box-shadow: 0 10px 30px rgba(var(--accent-rgb), 0.5); }
+.social.vlog { grid-template-columns: 96px 1fr; }
+.social.vlog .vthumb { width: 96px; height: 60px; object-fit: cover; border-radius: 12px; }
+
+#cinema .cin-stage { outline: none; }
+#cinema .cin-ambient { position: absolute; inset: -12%; width: 124%; height: 124%; filter: blur(48px) saturate(1.4) brightness(0.9); opacity: 0.75; pointer-events: none; z-index: 0; transform: translateZ(0); }
+#cinema .cin-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; z-index: 1; cursor: pointer; }
+#cinema .cin-play { z-index: 3; }
+#cinema.playing .cin-play { opacity: 0; pointer-events: none; }
+#cinema .cin-spinner { position: absolute; inset: 0; margin: auto; width: 54px; height: 54px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, 0.2); border-top-color: var(--accent); animation: spin 0.9s linear infinite; z-index: 3; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+#cinema.buffering .cin-spinner { opacity: 1; }
+#cinema .cin-unmute { position: absolute; top: 16px; left: 16px; z-index: 4; cursor: pointer; }
+#cinema .cin-ctrl { position: absolute; left: 0; right: 0; bottom: 0; z-index: 4; padding: 40px 16px 12px; background: linear-gradient(180deg, transparent, rgba(4, 6, 12, 0.85)); transition: opacity 0.35s, transform 0.35s var(--ease-out); }
+#cinema.idle .cin-ctrl { opacity: 0; transform: translateY(8px); pointer-events: none; }
+#cinema.idle .cin-video { cursor: none; }
+#cinema .cin-progress { position: relative; height: 6px; border-radius: 99px; background: rgba(255, 255, 255, 0.18); cursor: pointer; margin-bottom: 10px; touch-action: none; }
+#cinema .cin-progress:hover, #cinema .cin-progress:focus-visible { height: 9px; outline: none; }
+#cinema .cin-progress .buf { position: absolute; inset: 0 auto 0 0; width: 0; border-radius: inherit; background: rgba(255, 255, 255, 0.28); }
+#cinema .cin-progress .played { position: absolute; inset: 0 auto 0 0; width: 0; border-radius: inherit; background: linear-gradient(90deg, var(--accent), var(--accent-2)); box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.8); }
+#cinema .cin-progress .knob { position: absolute; top: 50%; left: 0; width: 16px; height: 16px; border-radius: 50%; background: #fff; transform: translate(-50%, -50%) scale(0); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); transition: transform 0.2s var(--ease-spring); }
+#cinema .cin-progress:hover .knob { transform: translate(-50%, -50%) scale(1); }
+#cinema .cin-bar { display: flex; align-items: center; gap: 6px; }
+#cinema .cin-bar button { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; font-size: 16px; color: #fff; background: rgba(255, 255, 255, 0.06); transition: background 0.25s, transform 0.25s var(--ease-spring); }
+#cinema .cin-bar button:hover { background: rgba(255, 255, 255, 0.16); transform: translateY(-1px); }
+#cinema .cin-bar button.cin-pp { width: 44px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #0a0b10; font-weight: 900; }
+#cinema .cin-bar button.cin-hd { font-size: 11px; font-weight: 900; letter-spacing: 0.1em; width: auto; padding: 0 10px; }
+#cinema .cin-bar button.cin-hd.on { background: rgba(var(--accent-rgb), 0.35); color: var(--accent); }
+#cinema .cin-bar button[data-act="speed"] { font-size: 12px; font-weight: 800; width: auto; padding: 0 10px; }
+#cinema .cin-vol { width: 90px; height: 4px; }
+#cinema .cin-vol::-webkit-slider-thumb { width: 14px; height: 14px; border-width: 3px; }
+#cinema .cin-time { font-size: 12.5px; color: var(--text-2); margin-left: 6px; white-space: nowrap; }
+#cinema .cin-spacer { flex: 1; }
+#cinema .cin-adfree { font-size: 10px; font-weight: 900; letter-spacing: 0.2em; color: var(--ok); border: 1px solid rgba(74, 222, 128, 0.5); padding: 4px 8px; border-radius: 6px; background: rgba(74, 222, 128, 0.1); }
+#cinema .cin-meta a { color: var(--accent); }
+#cinema.ended .cin-play { opacity: 1; pointer-events: auto; }
+#cinema .cin-stage:fullscreen { border-radius: 0; }
+#cinema .cin-stage:fullscreen .cin-video { object-fit: contain; }
+@media (max-width: 640px) {
+  #cinema .cin-vol, #cinema .cin-bar button[data-act="pip"], #cinema .cin-bar button[data-act="speed"] { display: none; }
+  #cinema .cin-bar { gap: 4px; }
+  #cinema .cin-bar button { width: 34px; height: 34px; }
+  .social.vlog { grid-template-columns: 1fr; }
+  .social.vlog .vthumb { width: 100%; height: 120px; }
+}

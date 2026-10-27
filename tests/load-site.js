@@ -10,11 +10,11 @@ function loadSite() {
   g.performance = g.performance || { now: () => Date.now() };
   g.requestAnimationFrame = (fn) => setTimeout(() => fn(Date.now()), 0);
   g.matchMedia = () => ({ matches: false });
-  for (const f of ["data/images.js", "data/videos.js", "data/flights.js", "data/vietnam.js", "data/bali.js", "js/util.js"]) {
+  for (const f of ["data/images.js", "data/videos.js", "data/clips.js", "data/flights.js", "data/vietnam.js", "data/bali.js", "js/util.js"]) {
     delete require.cache[require.resolve(path.join(docs, f))];
     require(path.join(docs, f));
   }
-  return { IMAGES: g.IMAGES, VIDEOS: g.VIDEOS, FLIGHTS: g.FLIGHTS, VIETNAM: g.VIETNAM, BALI: g.BALI, U: g.U };
+  return { IMAGES: g.IMAGES, VIDEOS: g.VIDEOS, CLIPS: g.CLIPS, FLIGHTS: g.FLIGHTS, VIETNAM: g.VIETNAM, BALI: g.BALI, U: g.U };
 }
 
 module.exports = { loadSite };

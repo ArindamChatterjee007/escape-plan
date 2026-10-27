@@ -221,6 +221,7 @@
           <div><span>Per head · mid-range</span><b>${U.fmt(cm.total)}</b><small>private rooms, more tours</small></div>
           <div><span>Group of ${people}</span><b>${U.fmt(cb.total * people)}</b><small>budget style · ${U.fmt(cm.total * people)} mid</small></div>
         </div>
+        <p class="tiny" style="margin-top:14px;color:var(--warn)">⚠️ Flight fares are estimates — live 2027 fares were not found/booked yet. Everything else is per-head, all-in.</p>
         <div class="hero-cta" style="opacity:1;animation:none">
           <button class="btn primary" data-tab-link="${recId}" data-scroll="#${recId}-itinerary">📅 See the day-by-day</button>
           <button class="btn" data-tab-link="${recId}" data-scroll="#${recId}-flights">✈️ Flights & deals</button>
@@ -328,8 +329,9 @@
     let tx = 0; lb.addEventListener("touchstart", (e) => (tx = e.touches[0].clientX), { passive: true }); lb.addEventListener("touchend", (e) => { const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) $(dx < 0 ? ".next" : ".prev", lb).click(); });
   }
 
-  /* ---------- cinema video player ---------- */
-  const CIN = { key: null, i: 0, playing: false, el: null };
+  /* ---------- cinema: our own ad-free HTML5 player ---------- */
+  const CIN = { list: [], i: 0, el: null, video: null, hd: false, hideT: 0, ambT: 0, dest: null };
+  const fmtT = (s) => { s = Math.max(0, Math.floor(s || 0)); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; };
   function cinemaEl() {
     if (CIN.el) return CIN.el;
     const el = U.el(`<div id="cinema" role="dialog" aria-modal="true" aria-label="Video player">
@@ -337,49 +339,154 @@
       <button class="cin-x" aria-label="Close">✕</button>
       <div class="cin-wrap">
         <div class="cin-main">
-          <div class="cin-stage"><img class="cin-poster" alt=""><button class="cin-play" aria-label="Play"><i>▶</i></button><div class="cin-frame"></div></div>
+          <div class="cin-stage" tabindex="0">
+            <canvas class="cin-ambient" width="48" height="27" aria-hidden="true"></canvas>
+            <video class="cin-video" playsinline preload="auto" crossorigin="anonymous"></video>
+            <div class="cin-spinner" aria-hidden="true"></div>
+            <button class="cin-play" aria-label="Play"><i>▶</i></button>
+            <div class="cin-unmute chip accent" hidden>🔇 Tap for sound</div>
+            <div class="cin-ctrl">
+              <div class="cin-progress" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0"><div class="buf"></div><div class="played"></div><div class="knob"></div></div>
+              <div class="cin-bar">
+                <button data-act="prev" title="Previous (P)">⏮</button>
+                <button data-act="toggle" title="Play / pause (space)" class="cin-pp">▶</button>
+                <button data-act="next" title="Next (N)">⏭</button>
+                <button data-act="mute" title="Mute (M)">🔊</button>
+                <input type="range" class="cin-vol" min="0" max="1" step="0.05" value="0.9" aria-label="Volume">
+                <span class="cin-time mono">0:00 / 0:00</span>
+                <span class="cin-spacer"></span>
+                <span class="cin-adfree">AD-FREE</span>
+                <button data-act="hd" title="Quality" class="cin-hd" hidden>HD</button>
+                <button data-act="speed" title="Speed">1×</button>
+                <button data-act="pip" title="Picture in picture">⧉</button>
+                <button data-act="fs" title="Fullscreen (F)">⛶</button>
+              </div>
+            </div>
+          </div>
           <div class="cin-info"><span class="chip accent cin-label"></span><h3 class="cin-title"></h3><div class="cin-meta"></div></div>
-          <div class="cin-nav"><button class="btn small cin-prev">‹ Previous</button><button class="btn small cin-next">Next ›</button></div>
+          <div class="cin-nav"><button class="btn small cin-prev">‹ Previous</button><button class="btn small cin-next">Next ›</button><button class="btn small ghost cin-map">📍 Show on map</button></div>
         </div>
-        <aside class="cin-rail"><h4>Up next</h4><div class="cin-list"></div></aside>
+        <aside class="cin-rail"><h4>Up next <span class="tiny cin-count"></span></h4><div class="cin-list"></div></aside>
       </div>
     </div>`);
     document.body.appendChild(el);
+    const v = (CIN.video = $(".cin-video", el));
+    const stage = $(".cin-stage", el);
     $(".cin-x", el).addEventListener("click", closeCinema);
     el.addEventListener("click", (e) => { if (e.target === el || e.target.classList.contains("cin-bg")) closeCinema(); });
-    $(".cin-play", el).addEventListener("click", playCinema);
-    $(".cin-poster", el).addEventListener("click", playCinema);
+    $(".cin-play", el).addEventListener("click", (e) => { e.stopPropagation(); togglePlay(); });
+    v.addEventListener("click", togglePlay);
+    v.addEventListener("dblclick", toggleFs);
     $(".cin-prev", el).addEventListener("click", () => stepCinema(-1));
     $(".cin-next", el).addEventListener("click", () => stepCinema(1));
+    $(".cin-map", el).addEventListener("click", showOnMap);
+    $(".cin-unmute", el).addEventListener("click", () => { v.muted = false; $(".cin-unmute", el).hidden = true; reflectMute(); });
+    $(".cin-bar", el).addEventListener("click", (e) => {
+      const b = e.target.closest("button"); if (!b) return; e.stopPropagation();
+      const act = b.dataset.act;
+      if (act === "toggle") togglePlay(); else if (act === "prev") stepCinema(-1); else if (act === "next") stepCinema(1);
+      else if (act === "mute") { v.muted = !v.muted; reflectMute(); sfx("toggle", !v.muted); }
+      else if (act === "fs") toggleFs();
+      else if (act === "pip") { if (document.pictureInPictureElement) document.exitPictureInPicture(); else if (v.requestPictureInPicture) v.requestPictureInPicture().catch(() => {}); }
+      else if (act === "speed") { const sp = [1, 1.25, 1.5, 0.75]; v.playbackRate = sp[(sp.indexOf(v.playbackRate) + 1) % sp.length]; b.textContent = `${v.playbackRate}×`; sfx("tick"); }
+      else if (act === "hd") { CIN.hd = !CIN.hd; b.classList.toggle("on", CIN.hd); loadClip(true); sfx("pop"); }
+    });
+    $(".cin-vol", el).addEventListener("input", (e) => { v.volume = Number(e.target.value); v.muted = v.volume === 0; reflectMute(); });
+    // progress scrubbing
+    const prog = $(".cin-progress", el);
+    const seekTo = (clientX) => { const r = prog.getBoundingClientRect(); const pct = U.clamp((clientX - r.left) / r.width, 0, 1); if (v.duration) v.currentTime = pct * v.duration; };
+    let scrubbing = false;
+    prog.addEventListener("pointerdown", (e) => { scrubbing = true; prog.setPointerCapture(e.pointerId); seekTo(e.clientX); });
+    prog.addEventListener("pointermove", (e) => { if (scrubbing) seekTo(e.clientX); });
+    prog.addEventListener("pointerup", () => { scrubbing = false; });
+    prog.addEventListener("keydown", (e) => { if (e.key === "ArrowRight") v.currentTime += 5; if (e.key === "ArrowLeft") v.currentTime -= 5; });
+    // video events
+    v.addEventListener("timeupdate", updateProgress);
+    v.addEventListener("progress", updateProgress);
+    v.addEventListener("loadedmetadata", updateProgress);
+    v.addEventListener("play", () => { el.classList.add("playing"); el.classList.remove("ended"); scheduleHide(); startAmbient(); reflectPlay(); });
+    v.addEventListener("pause", () => { el.classList.remove("playing"); showControls(); stopAmbient(); reflectPlay(); });
+    v.addEventListener("waiting", () => el.classList.add("buffering"));
+    v.addEventListener("playing", () => el.classList.remove("buffering"));
+    v.addEventListener("canplay", () => el.classList.remove("buffering"));
+    v.addEventListener("ended", () => { el.classList.add("ended"); if (CIN.list.length > 1) setTimeout(() => { if (el.classList.contains("open")) stepCinema(1, true); }, 600); });
+    v.addEventListener("error", () => { el.classList.remove("buffering"); U.toast("This clip didn't load — skipping to the next one"); if (CIN.list.length > 1) setTimeout(() => stepCinema(1, true), 800); });
+    ["pointermove", "pointerdown", "keydown"].forEach((ev) => stage.addEventListener(ev, () => { showControls(); if (!v.paused) scheduleHide(); }));
+    stage.addEventListener("pointerleave", () => { if (!v.paused) scheduleHide(600); });
     CIN.el = el; return el;
   }
-  function cinVideos() { const g = (window.VIDEOS || {})[CIN.key]; return g ? g.videos : []; }
-  APP.openCinema = (key, i = 0) => {
-    const el = cinemaEl(); CIN.key = key; CIN.i = i; CIN.playing = false;
+  function reflectPlay() { const b = $(".cin-pp", CIN.el); if (b) b.textContent = CIN.video.paused ? "▶" : "❚❚"; }
+  function reflectMute() { const b = $('[data-act="mute"]', CIN.el); const v = CIN.video; if (b) b.textContent = v.muted || v.volume === 0 ? "🔇" : v.volume < 0.5 ? "🔉" : "🔊"; const r = $(".cin-vol", CIN.el); if (r) r.value = v.muted ? 0 : v.volume; }
+  function showControls() { CIN.el.classList.remove("idle"); }
+  function scheduleHide(ms = 2600) { clearTimeout(CIN.hideT); CIN.hideT = setTimeout(() => { if (CIN.video && !CIN.video.paused) CIN.el.classList.add("idle"); }, ms); }
+  function updateProgress() {
+    const v = CIN.video; if (!v || !CIN.el) return;
+    const d = v.duration || 0; const pct = d ? (v.currentTime / d) * 100 : 0;
+    $(".cin-progress .played", CIN.el).style.width = `${pct}%`; $(".cin-progress .knob", CIN.el).style.left = `${pct}%`;
+    try { if (v.buffered.length && d) $(".cin-progress .buf", CIN.el).style.width = `${(v.buffered.end(v.buffered.length - 1) / d) * 100}%`; } catch { /* noop */ }
+    $(".cin-progress", CIN.el).setAttribute("aria-valuenow", String(Math.round(pct)));
+    $(".cin-time", CIN.el).textContent = `${fmtT(v.currentTime)} / ${fmtT(d)}`;
+  }
+  function startAmbient() {
+    if (reduced) return;
+    stopAmbient();
+    const cv = $(".cin-ambient", CIN.el); const ctx = cv.getContext("2d", { willReadFrequently: false });
+    CIN.ambT = setInterval(() => { try { ctx.drawImage(CIN.video, 0, 0, cv.width, cv.height); } catch { /* cross-origin frame — keep poster glow */ } }, 400);
+  }
+  function stopAmbient() { clearInterval(CIN.ambT); CIN.ambT = 0; }
+  function togglePlay() { const v = CIN.video; if (v.paused) { const p = v.play(); if (p && p.catch) p.catch(() => { v.muted = true; $(".cin-unmute", CIN.el).hidden = false; reflectMute(); v.play().catch(() => {}); }); } else v.pause(); sfx("click"); }
+  function toggleFs() { const st = $(".cin-stage", CIN.el); if (document.fullscreenElement) document.exitFullscreen(); else if (st.requestFullscreen) st.requestFullscreen().catch(() => {}); else if (CIN.video.webkitEnterFullscreen) CIN.video.webkitEnterFullscreen(); }
+  function clipList(destId) {
+    const D = DESTS()[destId]; const order = D ? D.places.map((p) => p.id) : [];
+    return (window.CLIPS || []).filter((c) => c.dest === destId).slice().sort((a, b) => order.indexOf(a.place) - order.indexOf(b.place));
+  }
+  APP.openCinema = (destId, i = 0) => {
+    const el = cinemaEl();
+    CIN.dest = destId; CIN.list = clipList(destId); CIN.i = U.clamp(i, 0, Math.max(CIN.list.length - 1, 0));
+    if (!CIN.list.length) { U.toast("No clips for this destination yet"); return; }
     el.classList.add("open"); document.body.style.overflow = "hidden"; sfx("whoosh");
-    showCinema();
+    renderRail(); loadClip(false, true);
+    setTimeout(() => $(".cin-stage", el).focus({ preventScroll: true }), 50);
   };
-  function showCinema() {
-    const el = CIN.el, vids = cinVideos(), v = vids[CIN.i]; if (!v) return;
-    const g = window.VIDEOS[CIN.key];
-    const poster = $(".cin-poster", el); poster.onerror = () => { poster.onerror = null; poster.src = v.thumb; }; poster.src = `https://i.ytimg.com/vi/${v.id}/maxresdefault.jpg`;
-    $(".cin-bg", el).style.backgroundImage = `url(${v.thumb})`;
-    $(".cin-label", el).textContent = g.label; $(".cin-title", el).textContent = v.title;
-    $(".cin-meta", el).innerHTML = `<span>${h(v.channel)}</span> · <a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">Open on YouTube ↗</a>${v.channelUrl ? ` · <a href="${v.channelUrl}" target="_blank" rel="noopener">Channel ↗</a>` : ""} · <span class="tiny">${CIN.i + 1}/${vids.length}</span>`;
-    $(".cin-list", el).innerHTML = vids.map((x, j) => `<button class="cin-item ${j === CIN.i ? "active" : ""}" data-j="${j}"><img src="${x.thumb}" alt="" decoding="async"><div><b>${h(x.title)}</b><span>${h(x.channel)}</span></div></button>`).join("");
-    $$(".cin-item", el).forEach((b) => b.addEventListener("click", () => { CIN.i = Number(b.dataset.j); CIN.playing = true; showCinema(); }));
-    const frame = $(".cin-frame", el); frame.innerHTML = "";
-    el.classList.toggle("playing", CIN.playing);
-    if (CIN.playing) mountIframe();
+  function renderRail() {
+    const el = CIN.el;
+    $(".cin-count", el).textContent = `${CIN.i + 1} / ${CIN.list.length}`;
+    $(".cin-list", el).innerHTML = CIN.list.map((c, j) => `<button class="cin-item ${j === CIN.i ? "active" : ""}" data-j="${j}"><img src="${c.poster}" alt="" decoding="async"><div><b>${h(c.title)}</b><span>${h(c.area)} · ${h(c.credit)}</span></div></button>`).join("");
+    $$(".cin-item", el).forEach((b) => b.addEventListener("click", () => { CIN.i = Number(b.dataset.j); sfx("click"); renderRail(); loadClip(false, true); }));
+    const act = $(".cin-item.active", el); if (act && act.scrollIntoView) act.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }
-  function mountIframe() {
-    const v = cinVideos()[CIN.i]; if (!v) return;
-    $(".cin-frame", CIN.el).innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0&modestbranding=1&playsinline=1&color=white" title="${h(v.title)}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen></iframe>`;
-    CIN.el.classList.add("playing");
+  function loadClip(keepTime = false, autoplay = true) {
+    const el = CIN.el, v = CIN.video, c = CIN.list[CIN.i]; if (!c) return;
+    const t = keepTime ? v.currentTime : 0;
+    const src = CIN.hd && c.srcHd ? c.srcHd : c.src;
+    $(".cin-hd", el).hidden = !c.srcHd; $(".cin-hd", el).classList.toggle("on", CIN.hd && !!c.srcHd);
+    el.classList.add("buffering"); el.classList.remove("ended");
+    v.poster = c.poster || ""; v.src = src; v.currentTime = t; v.load();
+    $(".cin-bg", el).style.backgroundImage = `url(${c.poster})`;
+    $(".cin-label", el).textContent = `${c.area} · ${c.dest === "vietnam" ? "🇻🇳" : "🇮🇩"}`;
+    $(".cin-title", el).textContent = c.title;
+    $(".cin-meta", el).innerHTML = `<span>🚫 Ad-free · streamed by us, not YouTube</span> · <span>Video: <a href="${c.page}" target="_blank" rel="noopener">${h(c.credit)} ↗</a> (free licence)</span> · <span class="tiny">${CIN.i + 1}/${CIN.list.length}</span>`;
+    $(".cin-count", el).textContent = `${CIN.i + 1} / ${CIN.list.length}`;
+    $$(".cin-item", el).forEach((b, j) => b.classList.toggle("active", j === CIN.i));
+    if (autoplay) { const p = v.play(); if (p && p.catch) p.catch(() => { v.muted = true; $(".cin-unmute", el).hidden = false; reflectMute(); v.play().catch(() => {}); }); }
+    reflectPlay();
   }
-  function playCinema() { CIN.playing = true; sfx("pop"); mountIframe(); }
-  function stepCinema(d) { const n = cinVideos().length; if (!n) return; CIN.i = (CIN.i + d + n) % n; sfx("click"); showCinema(); }
-  function closeCinema() { if (!CIN.el) return; CIN.el.classList.remove("open", "playing"); $(".cin-frame", CIN.el).innerHTML = ""; CIN.playing = false; document.body.style.overflow = ""; sfx("click"); }
+  function stepCinema(d, auto = false) { const n = CIN.list.length; if (!n) return; CIN.i = (CIN.i + d + n) % n; if (!auto) sfx("click"); renderRail(); loadClip(false, true); }
+  function showOnMap() {
+    const c = CIN.list[CIN.i]; if (!c) return;
+    const D = DESTS()[c.dest]; const p = D && D.places.find((x) => x.id === c.place);
+    closeCinema();
+    switchTab(c.dest, { scrollTo: `#${c.dest}-map` });
+    if (p) setTimeout(() => $("#panel-" + c.dest).dispatchEvent(new CustomEvent("map:flyto", { detail: { lat: p.lat, lng: p.lng } })), 700);
+  }
+  function closeCinema() {
+    if (!CIN.el) return;
+    const v = CIN.video; v.pause(); v.removeAttribute("src"); v.load();
+    stopAmbient(); clearTimeout(CIN.hideT);
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    CIN.el.classList.remove("open", "playing", "buffering", "idle", "ended"); document.body.style.overflow = ""; sfx("click");
+  }
+  APP.closeCinema = closeCinema;
 
   /* ---------- share, sound, keys, footer ---------- */
   $("#shareBtn") && $("#shareBtn").addEventListener("click", async () => {
@@ -392,15 +499,26 @@
   reflectSound();
   document.addEventListener("keydown", (e) => {
     if (e.target.matches("input, textarea, select")) return;
-    if (e.key === "Escape") { closeLb(); closeCinema(); }
-    else if (e.key === "1") switchTab("overview"); else if (e.key === "2") switchTab("vietnam"); else if (e.key === "3") switchTab("bali");
+    const cinOpen = CIN.el && CIN.el.classList.contains("open");
+    if (e.key === "Escape") { closeLb(); closeCinema(); return; }
+    if (cinOpen) {
+      const v = CIN.video, k = e.key.toLowerCase();
+      if (e.key === " " || k === "k") { e.preventDefault(); togglePlay(); }
+      else if (e.key === "ArrowRight") v.currentTime = Math.min(v.duration || 0, v.currentTime + 5);
+      else if (e.key === "ArrowLeft") v.currentTime = Math.max(0, v.currentTime - 5);
+      else if (k === "l") v.currentTime += 10; else if (k === "j") v.currentTime -= 10;
+      else if (k === "n") stepCinema(1); else if (k === "p") stepCinema(-1);
+      else if (k === "m") { v.muted = !v.muted; reflectMute(); }
+      else if (k === "f") toggleFs();
+      return;
+    }
+    if (e.key === "1") switchTab("overview"); else if (e.key === "2") switchTab("vietnam"); else if (e.key === "3") switchTab("bali");
     else if (e.key.toLowerCase() === "m") soundBtn && soundBtn.click();
     else if (lb && lb.classList.contains("open") && (e.key === "ArrowRight" || e.key === "ArrowLeft")) $(e.key === "ArrowRight" ? ".next" : ".prev", lb).click();
-    else if (CIN.el && CIN.el.classList.contains("open") && (e.key === "ArrowRight" || e.key === "ArrowLeft")) stepCinema(e.key === "ArrowRight" ? 1 : -1);
   });
   function renderFooter() {
     const s = $("#footSources"); if (s) s.innerHTML = (F().sources || []).slice(0, 8).map((x) => `<li><a href="${x.u}" target="_blank" rel="noopener">${h(x.t)}</a></li>`).join("") || "<li>Sources load with the data files.</li>";
-    const lu = $("#lastUpdated"); if (lu) lu.textContent = `Prices compiled 27 Oct 2026 for travel May–July 2027 · all figures are per-person INR estimates · images ${window.IMAGES && window.IMAGES._count ? window.IMAGES._count : ""} verified · videos ${window.VIDEOS ? Object.keys(window.VIDEOS).filter((k) => !k.startsWith("_")).reduce((a, k) => a + window.VIDEOS[k].videos.length, 0) : 0} verified`;
+    const lu = $("#lastUpdated"); if (lu) lu.textContent = `Prices compiled 27 Oct 2026 for travel May–July 2027 · all figures are per-person INR estimates · images ${window.IMAGES && window.IMAGES._count ? window.IMAGES._count : ""} verified · ${(window.CLIPS || []).length} ad-free clips · ${window.VIDEOS ? Object.keys(window.VIDEOS).filter((k) => !k.startsWith("_")).reduce((a, k) => a + window.VIDEOS[k].videos.length, 0) : 0} vlogs linked`;
   }
 
   /* ---------- boot ---------- */

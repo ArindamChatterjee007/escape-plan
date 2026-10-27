@@ -68,7 +68,8 @@ test.describe("Escape Plan", () => {
     expect(await p.locator(".stay").count()).toBeGreaterThanOrEqual(15);
     expect(await p.locator(".exp").count()).toBeGreaterThanOrEqual(30);
     expect(await p.locator(".flight").count()).toBeGreaterThanOrEqual(4);
-    expect(await p.locator(".yt").count()).toBeGreaterThanOrEqual(6);
+    expect(await p.locator(".yt.clip").count()).toBeGreaterThanOrEqual(5);
+    expect(await page.locator("iframe").count()).toBe(0);
     expect(await p.locator(".pin").count()).toBeGreaterThanOrEqual(30);
     await expect(p.locator(".wx")).toHaveCount(4);
     // calculator == plan headline
@@ -109,7 +110,7 @@ test.describe("Escape Plan", () => {
     expect(problems).toEqual([]);
   });
 
-  test("bali: plan numbers, dates, July re-pricing, packing ring and cinema player", async ({ page }) => {
+  test("bali: plan numbers, dates, July re-pricing, packing ring and the ad-free cinema player", async ({ page }) => {
     const problems = watch(page);
     await open(page, "#bali");
     await expect(page.locator("html")).toHaveAttribute("data-theme", "bali");
@@ -133,24 +134,33 @@ test.describe("Escape Plan", () => {
     const off0 = await ring.evaluate((n) => n.style.strokeDashoffset);
     await p.locator(".pk").first().click();
     expect(await ring.evaluate((n) => n.style.strokeDashoffset)).not.toBe(off0);
-    // cinema
-    await p.locator(".yt").first().scrollIntoViewIfNeeded();
-    await p.locator(".yt").first().click();
+    // cinema: our own ad-free HTML5 player (no YouTube iframe anywhere)
+    await p.locator(".yt.clip").first().scrollIntoViewIfNeeded();
+    await p.locator(".yt.clip").first().click();
     const cin = page.locator("#cinema");
     await expect(cin).toHaveClass(/open/);
     await expect(cin.locator(".cin-title")).not.toBeEmpty();
-    expect(await cin.locator(".cin-item").count()).toBeGreaterThanOrEqual(2);
+    expect(await cin.locator(".cin-item").count()).toBeGreaterThanOrEqual(10);
+    expect(await page.locator("iframe").count()).toBe(0);
+    const video = cin.locator("video.cin-video");
+    await expect(video).toHaveAttribute("src", /^https:\/\/(videos\.pexels\.com|assets\.mixkit\.co)\/.+\.mp4$/);
+    await expect.poll(async () => video.evaluate((v) => v.readyState), { timeout: 30000 }).toBeGreaterThanOrEqual(2);
+    await expect.poll(async () => video.evaluate((v) => !v.paused || v.currentTime > 0), { timeout: 15000 }).toBe(true);
+    await expect(cin.locator(".cin-adfree")).toHaveText("AD-FREE");
     await page.screenshot({ path: `${SHOTS}/06-bali-cinema.png` });
-    await cin.locator(".cin-play").click();
-    await expect(cin).toHaveClass(/playing/);
-    await expect(cin.locator("iframe")).toHaveAttribute("src", /youtube-nocookie\.com\/embed\/[\w-]{11}/);
     const t1 = await cin.locator(".cin-title").textContent();
     await cin.locator(".cin-next").click();
     await expect(cin.locator(".cin-title")).not.toHaveText(t1);
+    await cin.locator(".cin-stage").hover();
+    await cin.locator('[data-act="mute"]').click();
+    expect(await video.evaluate((v) => v.muted)).toBe(true);
     await page.keyboard.press("Escape");
     await expect(cin).not.toHaveClass(/open/);
-    expect(await cin.locator("iframe").count()).toBe(0);
+    expect(await video.evaluate((v) => v.paused && !v.getAttribute("src"))).toBe(true);
     expect(await page.evaluate(() => document.body.style.overflow)).toBe("");
+    // flights disclaimer + vlogs are outbound links only
+    await expect(p.locator(".notice")).toContainText("NOT final");
+    expect(await p.locator("a.vlog[target=_blank][href^='https://www.youtube.com/watch']").count()).toBeGreaterThanOrEqual(4);
     await p.locator("#bali-dashboard").scrollIntoViewIfNeeded();
     await page.waitForTimeout(800);
     await page.screenshot({ path: `${SHOTS}/07-bali-dashboard.png` });
@@ -189,10 +199,11 @@ test.describe("Escape Plan", () => {
     await expect(page.locator("#panel-bali .day").first()).toBeVisible();
     await expect(page.locator("#panel-bali .map-box")).toBeVisible();
     await page.screenshot({ path: `${SHOTS}/08-mobile-bali-hero.png` });
-    await page.locator("#panel-bali .yt").first().scrollIntoViewIfNeeded();
-    await page.locator("#panel-bali .yt").first().click();
+    await page.locator("#panel-bali .yt.clip").first().scrollIntoViewIfNeeded();
+    await page.locator("#panel-bali .yt.clip").first().click();
     const w = await page.locator("#cinema .cin-wrap").evaluate((n) => n.getBoundingClientRect().width);
     expect(w).toBeLessThanOrEqual(390);
+    expect(await page.locator("iframe").count()).toBe(0);
     await page.screenshot({ path: `${SHOTS}/09-mobile-cinema.png` });
     await page.keyboard.press("Escape");
     await page.click("#tab-overview");

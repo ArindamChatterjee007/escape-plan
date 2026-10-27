@@ -2,7 +2,7 @@
 // Validates the content/data files against the schema the renderer depends on,
 // and checks that the headline plan numbers equal what the live calculator computes.
 const { loadSite } = require("./load-site");
-const { IMAGES, VIDEOS, FLIGHTS, VIETNAM, BALI, U } = loadSite();
+const { IMAGES, VIDEOS, CLIPS, FLIGHTS, VIETNAM, BALI, U } = loadSite();
 
 const fails = [];
 const warns = [];
@@ -34,6 +34,21 @@ for (const k of vGroups) {
     ok(/^https:\/\/i\.ytimg\.com\//.test(v.thumb), `VIDEOS.${k} ${v.id} bad thumb`);
   }
 }
+
+/* ---------- ad-free clips ---------- */
+ok(Array.isArray(CLIPS) && CLIPS.length >= 30, `CLIPS has only ${CLIPS && CLIPS.length} clips`);
+for (const d of ["vietnam", "bali"]) ok((CLIPS || []).filter((c) => c.dest === d).length >= 12, `CLIPS: fewer than 12 clips for ${d}`);
+const clipIds = new Set();
+for (const c of CLIPS || []) {
+  ok(c.id && !clipIds.has(c.id), `CLIPS duplicate/missing id ${c.id}`); clipIds.add(c.id);
+  ok(["vietnam", "bali"].includes(c.dest) && c.place && c.area && c.title, `CLIPS ${c.id} fields`);
+  ok(/^https:\/\/(videos\.pexels\.com|assets\.mixkit\.co)\/.+\.mp4$/.test(c.src), `CLIPS ${c.id} src must be a Pexels/Mixkit mp4 (ad-free sources only)`);
+  ok(!c.srcHd || /\.mp4$/.test(c.srcHd), `CLIPS ${c.id} srcHd`);
+  ok(isHttps(c.poster) && isHttps(c.page), `CLIPS ${c.id} poster/page`);
+  ok(["Pexels", "Mixkit"].includes(c.credit), `CLIPS ${c.id} credit`);
+  ok(!/youtube|youtu\.be|googlevideo/i.test(c.src), `CLIPS ${c.id} must not come from YouTube`);
+}
+for (const [D, id] of [[VIETNAM, "vietnam"], [BALI, "bali"]]) if (D) for (const c of (CLIPS || []).filter((x) => x.dest === id)) ok(D.places.some((p) => p.id === c.place), `CLIPS ${c.id}: place ${c.place} not in ${id}.places`);
 
 /* ---------- flights ---------- */
 ok(Array.isArray(FLIGHTS.options) && FLIGHTS.options.length >= 7, "FLIGHTS.options needs ≥7 routes");
@@ -168,7 +183,7 @@ for (const [D, id] of [[VIETNAM, "vietnam"], [BALI, "bali"]]) {
 
 /* ---------- report ---------- */
 const summary = {
-  images: imgKeys.size, videos: vGroups.reduce((a, k) => a + VIDEOS[k].videos.length, 0), routes: (FLIGHTS.options || []).length,
+  images: imgKeys.size, videos: vGroups.reduce((a, k) => a + VIDEOS[k].videos.length, 0), clips: (CLIPS || []).length, routes: (FLIGHTS.options || []).length,
   vietnam: VIETNAM && { places: VIETNAM.places.length, days: VIETNAM.itinerary.length, activities: VIETNAM.places.reduce((a, p) => a + p.activities.length, 0), perHead: VIETNAM.plan.perHeadBudget },
   bali: BALI && { places: BALI.places.length, days: BALI.itinerary.length, activities: BALI.places.reduce((a, p) => a + p.activities.length, 0), perHead: BALI.plan.perHeadBudget },
 };

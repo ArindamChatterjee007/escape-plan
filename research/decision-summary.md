@@ -2,6 +2,8 @@
 
 **Compiled 27 Oct 2026 for travel May–July 2027 · 1 INR ≈ 300 VND ≈ 190 IDR · 1 USD ≈ 84 INR · all prices INR per person, estimates (est.) — re-check live before paying · default group of 3 (per-head stays the same as the group grows; group total scales).**
 
+> ⚠️ **Flight prices are not final.** I could not retrieve live 2027 fares (airlines open bookings ~11 months ahead; fare sites block automated checks). Flight figures are estimates from past fares and sale patterns and **nothing has been booked** — re-check on Google Flights / Skyscanner before deciding.
+
 These numbers are exactly what the live site's calculator shows with default settings → https://arindamchatterjee007.github.io/escape-plan/
 
 ---
