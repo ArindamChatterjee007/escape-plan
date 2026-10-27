@@ -19,6 +19,10 @@ An interactive, animated trip planner for a group of friends flying from Bangalo
 |---|---|
 | ![Cinema](docs/assets/screenshots/06-bali-cinema.jpg) | ![Dashboard](docs/assets/screenshots/07-bali-dashboard.jpg) |
 
+| When to go — best month & cheapest days | Comfort plan itinerary |
+|---|---|
+| ![When to go](docs/assets/screenshots/11-when-to-go.jpg) | ![Comfort itinerary](docs/assets/screenshots/12-vietnam-itinerary-comfort.jpg) |
+
 ## What's inside
 | Path | Purpose |
 |------|---------|
