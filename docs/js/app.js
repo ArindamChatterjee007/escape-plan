@@ -100,7 +100,7 @@
     if (!["overview", "vietnam", "bali"].includes(name)) name = "overview";
     const go = () => {
       applyTab(name);
-      if (scrollTo && $(scrollTo)) setTimeout(() => $(scrollTo).scrollIntoView({ behavior: "auto", block: "start" }), 160);
+      if (scrollTo && $(scrollTo)) { const jump = () => $(scrollTo) && $(scrollTo).scrollIntoView({ behavior: "auto", block: "start" }); setTimeout(jump, 160); setTimeout(jump, 700); }
       else window.scrollTo({ top: 0, behavior: "instant" });
       history.replaceState(null, "", scrollTo && name === "overview" ? scrollTo : "#" + name);
     };
@@ -531,7 +531,13 @@
     const hash = location.hash.slice(1);
     const initial = tabForHash(hash) || U.state.tab || "overview";
     applyTab(initial);
-    if (hash && hash !== initial) setTimeout(() => { const t = document.getElementById(hash); if (t) t.scrollIntoView({ behavior: "smooth", block: "start" }); }, 500);
+    if (hash && hash !== initial) {
+      const jump = () => { const t = document.getElementById(hash); if (t) t.scrollIntoView({ behavior: "auto", block: "start" }); };
+      setTimeout(jump, 500);
+      // fonts/images reflow the page after first paint — land on the anchor again once they settle
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => setTimeout(jump, 150));
+      if (window.IMG && IMG.ready) IMG.ready.then(() => setTimeout(jump, 400));
+    }
     const done = () => { const p = $("#preloader"); if (p) p.classList.add("done"); placeIndicator(); };
     const loaded = new Promise((r) => (document.readyState === "complete" ? r() : window.addEventListener("load", r, { once: true })));
     Promise.race([Promise.all([window.IMG ? IMG.ready : Promise.resolve(), loaded]), new Promise((r) => setTimeout(r, 3000))]).then(() => setTimeout(done, 350));

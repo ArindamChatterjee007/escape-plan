@@ -171,9 +171,12 @@ test.describe("Escape Plan", () => {
     const problems = watch(page);
     await open(page, "#vietnam-itinerary");
     await expect(page.locator("html")).toHaveAttribute("data-theme", "vietnam");
-    await page.waitForTimeout(900);
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(1200);
+    // anchors land just below the sticky nav + subnav (scroll-margin-top ≈ 168 px)
     const top = await page.locator("#vietnam-itinerary").evaluate((n) => n.getBoundingClientRect().top);
-    expect(Math.abs(top)).toBeLessThan(160);
+    expect(top).toBeGreaterThan(-20);
+    expect(top).toBeLessThan(230);
     await page.evaluate(() => { location.hash = "#compare"; });
     await expect(page.locator("html")).toHaveAttribute("data-theme", "overview");
     await page.locator('[data-lock="bali"]').click();
