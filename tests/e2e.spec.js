@@ -30,12 +30,14 @@ test.describe("Escape Plan", () => {
     await open(page);
     await expect(page.locator("#thePlan h2")).toContainText("Go to");
     const kv = page.locator(".plan-kv b");
-    await expect(kv).toHaveCount(6);
+    await expect(kv).toHaveCount(3);
     const vn = await plan(page, "vietnam");
     await expect(kv.nth(2)).toHaveText(String(vn.days));
-    await expect(kv.nth(3)).toHaveText(fmtInr(vn.perHeadBudget), { timeout: 10000 });
-    await expect(kv.nth(4)).toHaveText(fmtInr(vn.perHeadMid));
-    await expect(kv.nth(5)).toHaveText(fmtInr(vn.perHeadBudget * 3));
+    // both plans side by side, with group totals for the default 3 people
+    await expect(page.locator('.plan-tier[data-style="budget"] b')).toHaveText(fmtInr(vn.perHeadBudget), { timeout: 10000 });
+    await expect(page.locator('.plan-tier[data-style="mid"] b')).toHaveText(fmtInr(vn.perHeadMid));
+    await expect(page.locator('.plan-tier[data-style="budget"] small')).toContainText(fmtInr(vn.perHeadBudget * 3));
+    await expect(page.locator('.plan-tier[data-style="mid"] small')).toContainText(fmtInr(vn.perHeadMid * 3));
     await expect(page.locator(".plan-alt .alt")).toHaveCount(2);
     await expect(page.locator("#heroSide .hero-stat")).toHaveCount(2);
     expect(await page.locator("#ticker .chip").count()).toBeGreaterThan(10);
@@ -94,7 +96,7 @@ test.describe("Escape Plan", () => {
     await p.locator('[data-range="people"]').evaluate((r) => { r.value = "5"; r.dispatchEvent(new Event("input", { bubbles: true })); });
     await expect(p.locator("[data-total-group]")).toHaveText(fmtInr(vn.perHeadBudget * 5), { timeout: 10000 });
     await expect(p.locator("[data-total-pp]")).toHaveText(fmtInr(vn.perHeadBudget));
-    await expect(page.locator(".plan-kv span", { hasText: "Group of 5" })).toHaveCount(1);
+    await expect(page.locator('.plan-tier[data-style="budget"] small')).toContainText("for 5"); // THE PLAN follows the people slider
     // Budget ↔ Comfort are two different plans: totals AND the day-by-day change
     const sleepBudget = await p.locator('.day[data-day="1"] .sleep').textContent();
     const ppBudget = await p.locator('.day[data-day="1"] .pp').textContent();
