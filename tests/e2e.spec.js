@@ -53,6 +53,7 @@ test.describe("Escape Plan", () => {
     expect(await page.locator("#footSources li").count()).toBeGreaterThanOrEqual(5);
     // When to go: 12 months × 2 destinations, clickable, with a calendar of cheapest days
     await expect(page.locator("#whenBox .mo")).toHaveCount(24);
+    await expect.poll(async () => page.locator("#whenBox .mo .bar i").first().evaluate((i) => i.getBoundingClientRect().width > 5 && i.getBoundingClientRect().height > 2), { timeout: 8000 }).toBe(true); // price bars visible
     await page.locator('#whenBox .mo[data-m="Jul"]').first().click();
     await expect(page.locator("[data-when-detail] h3")).toContainText("July 2027");
     expect(await page.locator("[data-when-detail] .cal .dy.cheap").count()).toBeGreaterThanOrEqual(2);

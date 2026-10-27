@@ -918,7 +918,8 @@ a.tip { text-decoration: none; display: block; }
 .mo .ml { font-size: 11px; font-weight: 800; letter-spacing: 0.08em; }
 .mo .wi { font-size: 18px; }
 .mo .bar { width: 100%; height: 42px; border-radius: 6px; background: var(--surface-2); position: relative; overflow: hidden; }
-.mo .bar i { position: absolute; left: 0; right: 0; bottom: 0; border-radius: 6px 6px 0 0; background: linear-gradient(180deg, var(--accent-2), var(--accent)); transition: height 0.9s var(--ease-out); }
+.mo .bar i { position: absolute; left: 0; right: 0; top: auto; bottom: 0; width: 100%; height: 0; border-radius: 6px 6px 0 0; background: linear-gradient(180deg, var(--accent-2), var(--accent)); transition: height 0.9s var(--ease-out); }
+.mo .bar i::after { display: none; }
 .mo .px { font-size: 10.5px; font-variant-numeric: tabular-nums; color: var(--text-2); }
 .mo .vb { font-size: 9px; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 6px; border-radius: 999px; }
 .vb.Best { background: rgba(74, 222, 128, 0.18); color: var(--ok); }
