@@ -1,6 +1,6 @@
 # Vietnam — Plan A research (10 days, Sat 19 Jun → Mon 28 Jun 2027, ex-Kolkata)
 
-> **Final numbers:** the authoritative per-head figures (Vietnam ₹49,175 / ₹76,400; Bali ₹57,905 / ₹92,655 for June departures, incl. return flights) are in [decision-summary.md](decision-summary.md) and match the live site's calculator. Tables below are the detailed working notes (est.).
+> **Final numbers:** the authoritative per-head figures (Budget / Comfort plans: Vietnam ₹49,175 / ₹64,825; Bali ₹57,905 / ₹73,865 for June departures, incl. return flights — Comfort = private rooms + easy transport at the same sale fares) are in [decision-summary.md](decision-summary.md) and match the live site's calculator. Tables below are the detailed working notes (est.).
 
 
 **Compiled:** 27 Oct 2026 · **Rates used:** 1 INR ≈ 300 VND · 1 USD ≈ 84 INR · **All prices are INR per person and are estimates ("est.") — verify live before paying.**

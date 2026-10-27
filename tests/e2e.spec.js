@@ -49,6 +49,18 @@ test.describe("Escape Plan", () => {
     await expect(page.locator("#comboRoute .route-node")).toHaveCount(6);
     await expect(page.locator("#comboStats .stat")).toHaveCount(4);
     expect(await page.locator("#footSources li").count()).toBeGreaterThanOrEqual(5);
+    // When to go: 12 months × 2 destinations, clickable, with a calendar of cheapest days
+    await expect(page.locator("#whenBox .mo")).toHaveCount(24);
+    await page.locator('#whenBox .mo[data-m="Jul"]').first().click();
+    await expect(page.locator("[data-when-detail] h3")).toContainText("July 2027");
+    expect(await page.locator("[data-when-detail] .cal .dy.cheap").count()).toBeGreaterThanOrEqual(2);
+    await page.locator('#whenBox .mo[data-m="Jun"]').first().click();
+    await expect(page.locator("[data-when-detail] h3")).toContainText("June 2027");
+    // THE PLAN shows both plans and switching one re-prices the site
+    await expect(page.locator(".plan-tier")).toHaveCount(2);
+    await page.locator('.plan-tier[data-style="mid"]').click();
+    await expect(page.locator('.plan-tier[data-style="mid"]')).toHaveClass(/active/);
+    await page.locator('.plan-tier[data-style="budget"]').click();
     await page.screenshot({ path: `${SHOTS}/01-overview-hero.png` });
     await page.locator("#thePlan").scrollIntoViewIfNeeded();
     await page.waitForTimeout(600);
@@ -83,10 +95,20 @@ test.describe("Escape Plan", () => {
     await expect(p.locator("[data-total-group]")).toHaveText(fmtInr(vn.perHeadBudget * 5), { timeout: 10000 });
     await expect(p.locator("[data-total-pp]")).toHaveText(fmtInr(vn.perHeadBudget));
     await expect(page.locator(".plan-kv span", { hasText: "Group of 5" })).toHaveCount(1);
-    // mid-range style
-    await p.locator('[data-seg="style"] button[data-v="mid"]').click();
+    // Budget ↔ Comfort are two different plans: totals AND the day-by-day change
+    const sleepBudget = await p.locator('.day[data-day="1"] .sleep').textContent();
+    const ppBudget = await p.locator('.day[data-day="1"] .pp').textContent();
+    await p.locator('.tier-switch [data-seg="style"] button[data-v="mid"]').click();
     await expect(p.locator("[data-total-pp]")).toHaveText(fmtInr(vn.perHeadMid), { timeout: 10000 });
-    await p.locator('[data-seg="style"] button[data-v="budget"]').click();
+    await expect(p.locator("[data-tier-card] b").first()).toContainText("Comfort");
+    await expect(p.locator('.day[data-day="1"] .sleep')).not.toHaveText(sleepBudget);
+    await expect(p.locator('.day[data-day="1"] .pp')).not.toHaveText(ppBudget);
+    expect(await p.locator(".tier-note").count()).toBeGreaterThanOrEqual(5);
+    expect(await p.locator(".stay.picked .pick-badge", { hasText: /comfort/i }).count()).toBeGreaterThanOrEqual(5);
+    await expect(page.locator(".plan-tier.active")).toHaveAttribute("data-style", "mid"); // THE PLAN card follows the global switch
+    await p.locator('.calc [data-seg="style"] button[data-v="budget"]').click();
+    await expect(p.locator('.day[data-day="1"] .sleep')).toHaveText(sleepBudget);
+    await expect(p.locator("[data-total-pp]")).toHaveText(fmtInr(vn.perHeadBudget), { timeout: 10000 });
     // map tiles + stop interaction
     await expect(p.locator(".leaflet-tile-loaded").first()).toBeAttached({ timeout: 30000 });
     await p.locator('[data-stop="hoian"]').click();

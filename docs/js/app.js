@@ -156,7 +156,8 @@
     for (const id of ["vietnam", "bali"]) {
       const d = D[id]; if (!d) continue;
       const c = planCost(d, "budget"); const fl = f(id);
-      out.push(`<div class="hero-stat glass"><div class="k">${d.flag} ${h(d.name)} · ${d.days} days · ${fmtD(d.plan.start)}</div><div class="v" data-count="${c.total}">${U.fmt(c.total)}<small>per head, all-in (est.)</small></div><div class="tiny" style="margin-top:4px">✈ from ${fl ? U.fmt(fl.low) + " RT · " + fl.option.from : "—"} · 🛏 ${U.fmt(d.budget.budget.stay)}/night</div></div>`);
+      const cmf = planCost(d, "mid");
+      out.push(`<div class="hero-stat glass"><div class="k">${d.flag} ${h(d.name)} · ${d.days} days · ${fmtD(d.plan.start)}</div><div class="v" data-count="${c.total}">${U.fmt(c.total)}<small>per head, budget plan (est.)</small></div><div class="tiny" style="margin-top:4px">🛏️ Comfort plan ${U.fmt(cmf.total)} · ✈ from ${fl ? U.fmt(fl.low) + " RT · " + fl.option.from : "—"}</div></div>`);
     }
     if (!out.length) out.push(`<div class="hero-stat glass"><div class="k">Status</div><div class="v" style="font-size:18px">Loading plan data…</div></div>`);
     box.innerHTML = out.join("");
@@ -217,10 +218,12 @@
           <div><span>Start</span><b>${U.fmtDate(startD)}</b><small title="${h(d.plan.departTime || r.departTime || "")}">${h(short(d.plan.departTime || r.departTime))}</small></div>
           <div><span>Return</span><b>${U.fmtDate(endD)}</b><small title="${h(d.plan.returnTime || r.returnTime || "")}">${h(short(d.plan.returnTime || r.returnTime))}</small></div>
           <div><span>Days</span><b>${d.days}</b><small>incl. travel days</small></div>
-          <div><span>Per head · budget</span><b data-plan-count="${cb.total}">${U.fmt(cb.total)}</b><small>all-in incl. return flights (est.)</small></div>
-          <div><span>Per head · mid-range</span><b>${U.fmt(cm.total)}</b><small>private rooms, more tours</small></div>
-          <div><span>Group of ${people}</span><b>${U.fmt(cb.total * people)}</b><small>budget style · ${U.fmt(cm.total * people)} mid</small></div>
         </div>
+        <div class="plan-tiers">
+          <button class="plan-tier ${U.state.style === "budget" ? "active" : ""}" data-style="budget"><span class="tt">🎒 Budget plan</span><b data-plan-count="${cb.total}">${U.fmt(cb.total)}</b><small>per head, all-in · ${U.fmt(cb.total * people)} for ${people}</small><em>${h(((d.tiers || {}).budget || {}).tagline || "Dorms, street food, buses — maximum trip for minimum money.")}</em></button>
+          <button class="plan-tier ${U.state.style === "mid" ? "active" : ""}" data-style="mid"><span class="tt">🛏️ Comfort plan</span><b>${U.fmt(cm.total)}</b><small>per head, all-in · ${U.fmt(cm.total * people)} for ${people}</small><em>${h(((d.tiers || {}).mid || {}).tagline || "Proper private rooms and zero hassle — still smart spending, not luxury.")}</em></button>
+        </div>
+        <p class="tiny" style="margin-top:10px">Comfort costs <b>${U.fmt(cm.total - cb.total)}</b> more per head than Budget — that buys private rooms every night, Grab/private transfers and the guided days. Click a plan to switch the whole site to it.</p>
         <p class="tiny" style="margin-top:14px;color:var(--warn)">⚠️ Flight fares are estimates — live 2027 fares were not found/booked yet. Everything else is per-head, all-in.</p>
         <div class="hero-cta" style="opacity:1;animation:none">
           <button class="btn primary" data-tab-link="${recId}" data-scroll="#${recId}-itinerary">📅 See the day-by-day</button>
@@ -234,6 +237,13 @@
       </div>
     </div>`;
     const n = box.querySelector("[data-plan-count]"); if (n) { const v2 = Number(n.dataset.planCount); n.textContent = ""; U.countTo(n, v2, { dur: 1200 }); }
+    box.querySelectorAll(".plan-tier").forEach((b) => b.addEventListener("click", () => {
+      if (U.state.style === b.dataset.style) return;
+      U.state.style = b.dataset.style; U.save(); sfx("pop");
+      $$("[role=tabpanel]").forEach((p) => p.dispatchEvent(new CustomEvent("dest:refresh")));
+      renderPlan(); renderCompare(); renderHeroSide();
+      U.toast(b.dataset.style === "mid" ? "🛏️ Comfort plan: private rooms, easy transport, smart spending" : "🎒 Budget plan: dorms, street food, buses");
+    }));
   }
 
   /* ---------- compare ---------- */
@@ -274,7 +284,7 @@
     const diff = Math.abs(A.total - B.total); const wBest = A.weather === B.weather ? null : A.weather > B.weather ? D.vietnam : D.bali;
     if (ver) ver.innerHTML = `<div class="trophy">🏆</div><div><h3>${cheaper.flag} ${h(cheaper.name)} is cheaper by <em style="color:var(--accent)">${U.fmt(diff)}</em> per head in ${month}${origin ? " from " + origin : ""}</h3>
       <p>${wBest && wBest !== cheaper ? `But ${wBest.name} has the better weather in ${month} (${h(wBest === D.vietnam ? A.wlabel : B.wlabel)}). If the squad can stretch ~${U.fmt(diff)} more per head, ${pricier.name} is the comfort pick.` : `${cheaper.name} also wins on weather this month — easy call.`} For 3 people that's ${U.fmt(diff * 3)} difference overall. ${h((F().verdict || {}).reason || "")}</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">${chip(`${D.vietnam.flag} ${U.fmt(A.total)} pp`, A.total <= B.total ? "accent" : "")}${chip(`${D.bali.flag} ${U.fmt(B.total)} pp`, B.total < A.total ? "accent" : "")}${chip(`Style: ${U.state.style || "budget"}`)}</div></div>`;
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">${chip(`${D.vietnam.flag} ${U.fmt(A.total)} pp`, A.total <= B.total ? "accent" : "")}${chip(`${D.bali.flag} ${U.fmt(B.total)} pp`, B.total < A.total ? "accent" : "")}${chip(`Plan: ${U.state.style === "mid" ? "🛏️ Comfort" : "🎒 Budget"}`)}</div></div>`;
   }
 
   /* ---------- combo ---------- */
@@ -288,6 +298,69 @@
     if (st) st.innerHTML = [["✈️", "All flights", U.fmt(flightsTotal), "per head, sale fares (est.)"], ["🧳", `${c.days}-day total`, U.fmt(c.perHeadBudget), `budget · ${U.fmt(c.perHeadMid)} mid`], ["📆", "Best start", rec ? fmtD(rec.start) : "—", rec ? `→ ${fmtD(rec.end)} 2027` : ""], ["💡", "vs two separate trips", `saves ${U.fmt(c.savingVsTwoTrips || 0)}`, "one set of long-haul flights"]]
       .map(([ic, k, v, s]) => `<div class="stat card glass tilt"><div class="icon">${ic}</div><div class="k">${k}</div><div class="v" style="font-size:26px">${v}</div><div class="s">${h(s)}</div></div>`).join("");
     APP.enhance(st);
+  }
+
+
+  /* ---------- when to go (best month + cheapest days) ---------- */
+  const DOW = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+  const MONTH_FULL = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  function renderWhen() {
+    const box = $("#whenBox"); if (!box) return;
+    const M = window.MONTHS_DATA;
+    if (!M || !M.months) { box.innerHTML = `<div class="card glass panel"><h3>Month-by-month analysis is being compiled…</h3></div>`; return; }
+    U.state.whenMonth = U.state.whenMonth || "Jun";
+    const strip = (dest, flag) => `<div class="mo-row-label">${flag} ${dest === "vietnam" ? "Vietnam" : "Bali"} <span class="tiny">· bar = flight price index (lower is cheaper)</span></div>
+      <div class="mo-strip">${M.months.map((mo) => { const x = mo[dest] || {}; const v = x.verdict || mo.badge || "OK"; return `<button class="mo ${v} ${U.state.whenMonth === mo.m ? "active" : ""}" data-m="${mo.m}" title="${h(mo.why || "")}"><span class="ml">${mo.m}</span><span class="wi">${(x.weather || {}).icon || ""}</span><span class="bar"><i data-h="${Math.round(U.clamp(((x.flightMult || 1) - 0.85) / 0.6, 0.08, 1) * 100)}"></i></span><span class="px">×${(x.flightMult || 1).toFixed(2)}</span><span class="vb ${v}">${v}</span></button>`; }).join("")}</div>`;
+    box.innerHTML = `
+      <div class="when-grid reveal in">
+        <div class="card glass panel">
+          ${strip("vietnam", "🇻🇳")}
+          ${strip("bali", "🇮🇩")}
+          <div class="legend-inline" style="margin-top:14px"><span><i style="background:#4ade80"></i>Best</span><span><i style="background:rgb(var(--accent-rgb))"></i>Good</span><span><i style="background:var(--surface-2)"></i>OK</span><span><i style="background:#fb7185"></i>Avoid</span><span class="tiny">· ×1.00 = cheapest month for flights (est.)</span></div>
+        </div>
+        <div class="when-detail card glass" data-when-detail></div>
+      </div>
+      ${M.best ? `<div class="verdict glass reveal in" style="margin-top:16px"><div class="trophy">📆</div><div><h3>Best month overall: <em style="color:var(--accent)">${h(MONTH_FULL[U.MONTHS.indexOf(M.best.overall)] || M.best.overall)} 2027</em> · cheapest flights: ${h(M.best.cheapestFlights || "")}</h3><p>${h(M.best.why || "")}</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">${(M.avoid || []).map((a) => `<span class="chip" title="${h(a.why)}">🚫 ${h(a.m)}: ${h(a.why.length > 80 ? a.why.slice(0, 77) + "…" : a.why)}</span>`).join("")}</div></div></div>` : ""}
+      ${M.rules ? `<div class="rules stagger in">
+        <div class="rule card glass"><div class="ic">📅</div><h4>Cheapest days to fly</h4><p>Depart ${(M.rules.departDays || []).join("/")} · return ${(M.rules.returnDays || []).join("/")} · priciest ${(M.rules.priciestDays || []).join("/")}</p></div>
+        <div class="rule card glass"><div class="ic">🌅</div><h4>Time of day</h4><p>${h(M.rules.timeOfDay || "")}</p></div>
+        <div class="rule card glass"><div class="ic">⏳</div><h4>When to book</h4><p>${h(M.rules.bookingLead || "")}</p></div>
+        <div class="rule card glass"><div class="ic">🏷️</div><h4>Sales to watch</h4><p>${(M.rules.sales || []).map((s) => `${h(s.name)} (${h(s.when)})`).join(" · ")}</p></div>
+      </div>` : ""}
+      ${M.picks ? `<div class="picks stagger in">${["vietnam", "bali"].map((id) => { const p = M.picks[id]; const D = DESTS()[id]; if (!p || !D) return ""; return `<div class="pickc card glass"><div class="tiny" style="letter-spacing:.2em;text-transform:uppercase;font-weight:800">${D.flag} ${h(D.name)} · cheapest dates in our window</div><h4>${fmtD(p.depart)} → ${fmtD(p.return)} 2027</h4><p class="muted" style="font-size:13.5px">Current plan dates — a weekend departure that suits a working squad.</p>${p.alt && p.alt.savingPct > 0 ? `<div class="alt">💡 <b>${fmtD(p.alt.depart)} → ${fmtD(p.alt.return)}</b>: ${h(p.alt.why || "")} — about <b>${p.alt.savingPct}% cheaper</b> flights (est.). <button class="btn small" style="margin-left:8px" data-use-dates="${id}" data-start="${p.alt.depart}">Use these dates</button></div>` : p.alt ? `<div class="alt" style="background:var(--surface);border-color:var(--border)">✅ <b>Keep these dates.</b> ${h(p.alt.why || "")}</div>` : ""}</div>`; }).join("")}</div>` : ""}`;
+    requestAnimationFrame(() => box.querySelectorAll(".mo .bar i").forEach((i) => (i.style.height = i.dataset.h + "%")));
+    box.querySelectorAll(".mo").forEach((b) => b.addEventListener("click", () => { U.state.whenMonth = b.dataset.m; U.save(); box.querySelectorAll(".mo").forEach((x) => x.classList.toggle("active", x.dataset.m === b.dataset.m)); renderWhenDetail(); sfx("tick"); }));
+    box.querySelectorAll("[data-use-dates]").forEach((b) => b.addEventListener("click", () => {
+      const id = b.dataset.useDates; U.state.startDate[id] = b.dataset.start; U.save(); sfx("success");
+      $("#panel-" + id).dispatchEvent(new CustomEvent("dest:refresh"));
+      U.toast(`${id === "vietnam" ? "🇻🇳" : "🇮🇩"} Start date set to ${fmtD(b.dataset.start)} — open the tab to see the plan`);
+      renderPlan(); renderCompare(); renderHeroSide();
+    }));
+    renderWhenDetail();
+  }
+  function renderWhenDetail() {
+    const M = window.MONTHS_DATA; const el = $("[data-when-detail]"); if (!M || !el) return;
+    const mo = M.months.find((x) => x.m === U.state.whenMonth) || M.months[5];
+    const idx = U.MONTHS.indexOf(mo.m); const year = M.year || 2027;
+    const first = new Date(year, idx, 1); const days = new Date(year, idx + 1, 0).getDate();
+    const hol = new Set((mo.holidays || []).map((x) => x.d));
+    const cheapV = new Set(((mo.cheapDays || {}).vietnam) || []), cheapB = new Set(((mo.cheapDays || {}).bali) || []);
+    const picks = new Set(); for (const id of ["vietnam", "bali"]) { const D = DESTS()[id]; if (D && D.plan) picks.add(D.plan.start); }
+    const iso = (d) => `${year}-${String(idx + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+    const cells = []; for (let i = 0; i < first.getDay(); i++) cells.push(`<span class="dy empty"></span>`);
+    for (let d = 1; d <= days; d++) { const s = iso(d); const dow = new Date(year, idx, d).getDay(); const cls = ["dy", dow === 0 || dow === 6 ? "we" : "", hol.has(s) ? "hol" : cheapV.has(s) || cheapB.has(s) ? "cheap" : "", picks.has(s) ? "pick" : ""].join(" "); const t = hol.has(s) ? (mo.holidays.find((x) => x.d === s) || {}).name : cheapV.has(s) && cheapB.has(s) ? "Cheap for both" : cheapV.has(s) ? "Cheap: Vietnam" : cheapB.has(s) ? "Cheap: Bali" : ""; cells.push(`<span class="${cls}" title="${h(t || "")}">${d}</span>`); }
+    const wx = (x) => x && x.weather ? `${x.weather.icon || ""} ${h(x.weather.temp || "")} · ${h(x.weather.label || "")}` : "—";
+    const gf = (dest) => `https://www.google.com/travel/flights?q=${encodeURIComponent(`Flights to ${dest === "vietnam" ? "Hanoi" : "Bali"} from ${dest === "vietnam" ? "Kolkata" : "Bangalore"} in ${MONTH_FULL[idx]} ${year}`)}`;
+    el.innerHTML = `
+      <h3>${MONTH_FULL[idx]} ${year} <span class="vb ${mo.badge || "OK"}" style="font-size:11px">${h(mo.badge || "")}</span></h3>
+      <p class="muted" style="font-size:14px">${h(mo.why || "")}</p>
+      ${mo.avoidWhy ? `<p style="font-size:13px;color:var(--bad)">🚫 ${h(mo.avoidWhy)}</p>` : ""}
+      <div class="wx2"><div><b>🇻🇳 Vietnam</b>${wx(mo.vietnam)}<div class="tiny" style="margin-top:4px">flights ×${((mo.vietnam || {}).flightMult || 1).toFixed(2)} · stays ×${((mo.vietnam || {}).stayMult || 1).toFixed(2)} · crowds: ${h((mo.vietnam || {}).crowd || "—")}</div></div>
+      <div><b>🇮🇩 Bali</b>${wx(mo.bali)}<div class="tiny" style="margin-top:4px">flights ×${((mo.bali || {}).flightMult || 1).toFixed(2)} · stays ×${((mo.bali || {}).stayMult || 1).toFixed(2)} · crowds: ${h((mo.bali || {}).crowd || "—")}</div></div></div>
+      <div class="cal">${DOW.map((d) => `<span class="dow">${d}</span>`).join("")}${cells.join("")}</div>
+      <div class="legend-inline"><span><i style="background:rgba(74,222,128,.6)"></i>cheapest departure days (est.)</span><span><i style="background:rgba(251,113,133,.6)"></i>holiday / price spike</span><span><i style="background:transparent;outline:2px solid var(--accent);outline-offset:-2px"></i>our planned start</span></div>
+      ${(mo.holidays || []).length ? `<div style="display:flex;flex-wrap:wrap;gap:6px">${mo.holidays.map((x) => chip(`${h(fmtD(x.d))} · ${h(x.name)}`)).join("")}</div>` : ""}
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn small" href="${gf("vietnam")}" target="_blank" rel="noopener">🇻🇳 Live fares this month ↗</a><a class="btn small" href="${gf("bali")}" target="_blank" rel="noopener">🇮🇩 Live fares this month ↗</a></div>`;
   }
 
   /* ---------- lock-in + confetti ---------- */
@@ -524,7 +597,7 @@
   }
 
   /* ---------- boot ---------- */
-  function renderOverview() { renderHeroSide(); renderTicker(); renderChoices(); renderMarquee(); renderPlan(); renderCompare(); renderCombo(); renderFooter(); APP.enhance($("#panel-overview")); }
+  function renderOverview() { renderHeroSide(); renderTicker(); renderChoices(); renderMarquee(); renderPlan(); renderWhen(); renderCompare(); renderCombo(); renderFooter(); APP.enhance($("#panel-overview")); }
   let debounceT;
   document.addEventListener("state:changed", () => { clearTimeout(debounceT); debounceT = setTimeout(() => { renderPlan(); renderCompare(); renderHeroSide(); }, 120); });
 

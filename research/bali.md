@@ -1,6 +1,6 @@
 # Bali — nine-day dry-season plan from Bangalore
 
-> **Final numbers:** the authoritative per-head figures (Vietnam ₹49,175 / ₹76,400; Bali ₹57,905 / ₹92,655 for June departures, incl. return flights) are in [decision-summary.md](decision-summary.md) and match the live site's calculator. Tables below are the detailed working notes (est.).
+> **Final numbers:** the authoritative per-head figures (Budget / Comfort plans: Vietnam ₹49,175 / ₹64,825; Bali ₹57,905 / ₹73,865 for June departures, incl. return flights — Comfort = private rooms + easy transport at the same sale fares) are in [decision-summary.md](decision-summary.md) and match the live site's calculator. Tables below are the detailed working notes (est.).
 
 
 **Compiled: 27 Oct 2026. Planning rates: 1 INR ≈ 190 IDR; 1 USD ≈ 84 INR.** All prices below are estimates, not live quotes or guaranteed 2027 availability. Unless explicitly called a whole-car/whole-villa total, prices are INR **per person**, using **three travellers**. Property review scores have not been verified: “Verify live” is deliberate, not an invented rating.

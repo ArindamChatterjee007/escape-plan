@@ -8,15 +8,21 @@ These numbers are exactly what the live site's calculator shows with default set
 
 ---
 
+## Two plans, one switch
+- **🎒 Budget plan** — hostel dorms, street food, public buses/sleeper trains, DIY sightseeing. Maximum trip for minimum money.
+- **🛏️ Comfort plan** — proper private rooms every night (3★ / boutique homestays / pool villa split by 3), Grab cars & private transfers, a private driver on touring days, guided Cu Chi / Mekong / Nusa Penida / Batur days, the Lan Hạ overnight cruise included, sit-down local restaurants. *Roam freely without thinking — still smart spending, not luxury.* Same cheap sale flights as Budget, plus a checked bag.
+
+On the site the switch is in each destination's header and in the calculator; every day's room, transport and per-head cost changes with it.
+
 ## ✅ Recommendation: Vietnam · Sat 19 Jun → Mon 28 Jun 2027 (10 days) · from Kolkata
 
-| | Budget (dorms, street food, buses) | Mid-range (private rooms, more tours) |
+| | 🎒 Budget plan (dorms, street food, buses) | 🛏️ Comfort plan (private rooms, Grab/driver, guided days — smart spending, not luxury) |
 |---|---:|---:|
-| Return flights CCU→HAN / SGN→CCU (IndiGo nonstop, June fare ×1.05) | ₹15,225 | ₹22,050 |
-| 10 days on the ground (stay + food + local transport + activities) | ₹23,000 (₹2,300/day) | ₹41,000 (₹4,100/day) |
-| Extras: e-visa ₹2,100 · 2 domestic flights ₹4,100/₹6,800 · SIM ₹350 · insurance ₹900 · cruise/Hải Vân top-up ₹1,700 · 8 % buffer | ₹10,950 | ₹13,350 |
-| **Per head, all-in** | **₹49,175** | **₹76,400** |
-| **Group of 3** | **₹1,47,525** | **₹2,29,200** |
+| Return flights CCU→HAN / SGN→CCU (IndiGo nonstop, June sale fare ×1.05 — same fare both plans) | ₹15,225 | ₹15,225 |
+| 10 days on the ground (stay + food + local transport + activities) | ₹23,000 (₹2,300/day) | ₹36,500 (₹3,650/day: private double ₹1,300 pp · food ₹800 · Grab ₹450 · activities ₹1,100) |
+| Extras: e-visa ₹2,100 · 2 domestic flights ₹4,100/₹4,800 · SIM · insurance · checked bag (Comfort) ₹1,800 · cruise/Hải Vân top-up ₹1,700 (Budget only; included in Comfort) · buffer | ₹10,950 | ₹13,100 |
+| **Per head, all-in** | **₹49,175** | **₹64,825** |
+| **Group of 3** | **₹1,47,525** | **₹1,94,475** |
 
 **Start:** Sat 19 Jun — be at Kolkata (CCU) by ~03:30, IndiGo CCU→HAN ~06:30, land Hanoi ~11:00 (est.).
 **Return:** Mon 28 Jun — IndiGo SGN→CCU ~20:30, land Kolkata ~22:30 the same night (est.). *Flying from Bangalore instead adds ≈ ₹1,600 per head (BLR→SGN/HAN nonstops ₹16,000–16,500).*
@@ -39,13 +45,13 @@ These numbers are exactly what the live site's calculator shows with default set
 
 ## 🌤️ Weather-first alternative: Bali · Sat 12 Jun → Sun 20 Jun 2027 (9 days) · from Bangalore
 
-| | Budget | Mid-range |
+| | 🎒 Budget plan | 🛏️ Comfort plan |
 |---|---:|---:|
-| Return flights BLR↔DPS (IndiGo nonstop or AirAsia/Scoot 1-stop, June ×1.05) | ₹21,000 | ₹31,500 |
-| 9 days on the ground (June stays ×1.05) | ₹26,955 (≈ ₹2,950/day) | ₹48,555 (≈ ₹5,300/day) |
-| Extras: Visa on Arrival ₹2,600 · tourist levy ₹800 · SIM · insurance · contingency · shared driver/boat top-up | ₹9,950 | ₹12,600 |
-| **Per head, all-in** | **₹57,905** | **₹92,655** |
-| **Group of 3** | **₹1,73,715** | **₹2,77,965** |
+| Return flights BLR↔DPS (IndiGo nonstop or AirAsia/Scoot 1-stop, June sale fare ×1.05 — same both plans) | ₹21,000 | ₹21,000 |
+| 9 days on the ground (June stays ×1.05) | ₹26,955 (≈ ₹2,950/day) | ₹43,065 (≈ ₹4,700/day: private room/villa ÷3 ₹1,700 pp · food ₹950 · driver days ₹750 · activities ₹1,300) |
+| Extras: Visa on Arrival ₹2,600 · tourist levy ₹800 · SIM · insurance · checked bag (Comfort) · contingency · driver/boat top-up (Budget only; inside Comfort's daily costs) | ₹9,950 | ₹9,800 |
+| **Per head, all-in** | **₹57,905** | **₹73,865** |
+| **Group of 3** | **₹1,73,715** | **₹2,21,595** |
 
 **Start:** Sat 12 Jun — BLR check-in ~00:15, depart ~03:15 via KUL/SIN (or a nonstop if operating), arrive Denpasar ~15:30 local (est.).
 **Return:** Sun 20 Jun — DPS night flight ~21:30, lands Bangalore early **Mon 21 Jun** (take Monday off). A morning return on 20 Jun lands the same evening.

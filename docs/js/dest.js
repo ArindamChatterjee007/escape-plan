@@ -14,6 +14,16 @@
   const placeOf = (D, id) => D.places.find((p) => p.id === id) || D.places[0];
   const COLORS = { flights: "var(--accent)", stay: "var(--accent-2)", food: "#4ade80", transport: "#60a5fa", activities: "#f472b6", extras: "#a3a3a3" };
   const LABELS = { flights: "Flights (return)", stay: "Stay", food: "Food", transport: "Local transport", activities: "Activities", extras: "Visa, SIM, extras & buffer" };
+  const TIER = { budget: { label: "Budget", icon: "🎒" }, mid: { label: "Comfort", icon: "🛏️" } };
+  const tierOf = (D) => (D.tiers && D.tiers[U.state.style]) || TIER[U.state.style] || TIER.budget;
+  const tierKey = () => (U.state.style === "mid" ? "comfort" : "budget");
+  // Resolve a day's content for the active mode (Comfort overrides sleep / some acts / ppCost)
+  function dayFor(d) {
+    if (U.state.style !== "mid" || !d.comfort) return { acts: d.acts || [], sleep: d.sleep, ppCost: d.ppCost, note: null };
+    const c = d.comfort;
+    const acts = (d.acts || []).map((a, i) => { const o = (c.acts || []).find((x) => x.i === i); return o ? Object.assign({}, a, o) : a; });
+    return { acts, sleep: c.sleep || d.sleep, ppCost: typeof c.ppCost === "number" ? c.ppCost : d.ppCost, note: c.note || null };
+  }
 
   function pic(key, i, alt, opts = {}) {
     const im = U.img(key, i || 0, opts.w);
@@ -54,6 +64,10 @@
         <h1 style="margin-top:14px">${h(D.name)}<span class="flag">${D.flag}</span></h1>
         <p class="tagline">${h(D.tagline)}</p>
         <div class="quick-chips">${(D.quick || []).map((q) => chip(h(q), "accent")).join("")}</div>
+        <div class="tier-switch">
+          <div class="seg" data-seg="style"><button data-v="budget" class="${U.state.style === "budget" ? "active" : ""}">🎒 Budget plan</button><button data-v="mid" class="${U.state.style === "mid" ? "active" : ""}">🛏️ Comfort plan</button></div>
+          <div class="tier-card glass" data-tier-card></div>
+        </div>
       </div>
     </div>
     <nav class="subnav glass" aria-label="${h(D.name)} sections">
@@ -92,7 +106,7 @@
         </div>
         <div class="dash-grid">
           <div class="panel card glass reveal">
-            <h3>💸 Per-head breakdown <small data-style-label>${s.style === "mid" ? "mid-range" : "budget"}</small></h3>
+            <h3>💸 Per-head breakdown <small data-style-label>${s.style === "mid" ? "comfort plan" : "budget plan"}</small></h3>
             <p class="sub">${h(D.name)} · <span data-days-label>${days}</span> days · incl. return flights from <span data-origin-label>${h((s.originBy && s.originBy[D.id]) || D.plan.origin)}</span></p>
             <div class="donut-wrap">
               <div class="donut">${donutSvg()}<div class="center"><b data-donut-total>₹0</b><span>per head</span></div></div>
@@ -104,7 +118,7 @@
             <p class="sub">Per-head stays the same when you add friends — the group total scales. Shared villas / drivers get cheaper per head.</p>
             <div class="calc">
               <div class="field"><label>Travel style</label>
-                <div class="seg" data-seg="style"><button data-v="budget" class="${s.style === "budget" ? "active" : ""}">🎒 Budget</button><button data-v="mid" class="${s.style === "mid" ? "active" : ""}">🛎️ Mid-range</button></div></div>
+                <div class="seg" data-seg="style"><button data-v="budget" class="${s.style === "budget" ? "active" : ""}">🎒 Budget</button><button data-v="mid" class="${s.style === "mid" ? "active" : ""}">🛏️ Comfort</button></div></div>
               <div class="field"><label>People <output data-out="people">${s.people} friends</output></label>
                 <input type="range" min="1" max="8" step="1" value="${s.people}" data-range="people"></div>
               <div class="field"><label>Days <output data-out="days">${days} days</output></label>
@@ -151,18 +165,10 @@
     </section>`;
   }
 
-  function itinerary(D) {
+  function dayHtml(D, d, idx) {
+    const p = placeOf(D, d.placeId);
+    const v = dayFor(d);
     return `
-    <section class="section" id="${D.id}-itinerary" style="padding-top:0">
-      <div class="container">
-        <div class="section-head reveal">
-          <div><span class="eyebrow">Day by day</span><h2>The <em>${D.days}-day</em> ground plan</h2></div>
-          <p>From the airport at home to landing back. Times are suggestions — early mornings beat the heat and the crowds. Tap a thumbnail to see it big.</p>
-        </div>
-        <div class="timeline"><div class="progress"></div>
-          ${(D.itinerary || []).map((d, idx) => {
-            const p = placeOf(D, d.placeId);
-            return `
             <article class="day card glass" data-day="${d.day}">
               <div class="num">${d.day}<small>DAY</small></div>
               <div class="pic">${pic(d.imgKey || p.imgKey, d.imgI || 0, d.title)}<span class="where">📍 ${h(p.name)}</span></div>
@@ -170,31 +176,37 @@
                 <div class="date" data-date-idx="${idx}"></div>
                 <h3>${h(d.title)}</h3>
                 <p class="desc">${h(d.desc)}</p>
+                ${v.note ? `<div class="tier-note">🛏️ <b>Comfort today:</b> ${h(v.note)}</div>` : ""}
                 <div class="acts">
-                  ${(d.acts || []).map((a) => `<div class="act ${a.imgKey ? "has-th" : ""}"><span class="t">${h(a.t || "")}</span>${a.imgKey ? `<img class="th" src="${U.img(a.imgKey, 0, 300).url}" alt="${h(a.name)}" data-tags="${h(a.name)}" loading="lazy" data-lb-key="${a.imgKey}" data-lb-cap="${h(a.name)}">` : ""}<span><b>${h(a.name)}</b><span>${h(a.desc || "")}${a.social ? ` <a class="ig" href="${a.social}" target="_blank" rel="noopener">↗ see it</a>` : ""}${a.lat ? ` <a class="ig" href="${gmaps(a.lat, a.lng)}" target="_blank" rel="noopener">📍 map</a>` : ""}</span></span><span class="cost">${a.costInr ? U.fmt(a.costInr) : "free"}</span></div>`).join("")}
+                  ${v.acts.map((a) => `<div class="act ${a.imgKey ? "has-th" : ""}"><span class="t">${h(a.t || "")}</span>${a.imgKey ? `<img class="th" src="${U.img(a.imgKey, 0, 300).url}" alt="${h(a.name)}" data-tags="${h(a.name)}" loading="lazy" data-lb-key="${a.imgKey}" data-lb-cap="${h(a.name)}">` : ""}<span><b>${h(a.name)}</b><span>${h(a.desc || "")}${a.social ? ` <a class="ig" href="${a.social}" target="_blank" rel="noopener">↗ see it</a>` : ""}${a.lat ? ` <a class="ig" href="${gmaps(a.lat, a.lng)}" target="_blank" rel="noopener">📍 map</a>` : ""}</span></span><span class="cost">${a.costInr ? U.fmt(a.costInr) : "free"}</span></div>`).join("")}
                 </div>
-                <div class="day-foot"><span class="sleep">🛏️ <b>${h(d.sleep.name)}</b> · ${h(d.sleep.type)} · ${U.fmt(d.sleep.priceInr)} pp</span><span class="pp">≈ ${U.fmt(d.ppCost)} / head today</span></div>
+                <div class="day-foot"><span class="sleep">🛏️ <b>${h(v.sleep.name)}</b> · ${h(v.sleep.type)} · ${v.sleep.priceInr ? U.fmt(v.sleep.priceInr) + " pp" : "—"}</span><span class="pp">≈ ${U.fmt(v.ppCost)} / head today</span></div>
               </div>
             </article>`;
-          }).join("")}
+  }
+  function itinerary(D) {
+    return `
+    <section class="section" id="${D.id}-itinerary" style="padding-top:0">
+      <div class="container">
+        <div class="section-head reveal">
+          <div><span class="eyebrow">Day by day · <span data-tier-word>${tierOf(D).label}</span> plan</span><h2>The <em>${D.days}-day</em> ground plan</h2></div>
+          <p>From the airport at home to landing back. Switch Budget ↔ Comfort above and every day's room, transport and per-head cost changes. Tap a thumbnail to see it big.</p>
         </div>
+        <div class="timeline"><div class="progress"></div>${(D.itinerary || []).map((d, idx) => dayHtml(D, d, idx)).join("")}</div>
       </div>
     </section>`;
   }
 
-  function stays(D) {
-    return `
-    <section class="section" id="${D.id}-stays" style="padding-top:0">
-      <div class="container">
-        <div class="section-head reveal">
-          <div><span class="eyebrow">Sleep cheap, sleep well</span><h2>Lowest-price <em>stays</em> that still rate 8.5+</h2></div>
-          <p>Prices are per person per night (est.). Dorms for the cheapest nights; private rooms and villas split 3-ways when we want a pool.</p>
-        </div>
-        ${D.places.filter((p) => (p.stays || []).length).map((p) => `
-        <div class="stay-group reveal">
+  function staysInner(D) {
+    const tk = tierKey();
+    return (D.places || []).filter((p) => (p.stays || []).length).map((p) => {
+      const sorted = p.stays.slice().sort((a, b) => ((b.tier === tk) - (a.tier === tk)) || ((b.pick ? 1 : 0) - (a.pick ? 1 : 0)));
+      return `
+        <div class="stay-group reveal in">
           <h3>${h(p.name)} <span class="muted" style="font-size:14px;font-family:var(--font-body);font-weight:600">· ${h(p.area || "")}</span>${chip(p.nights ? `${p.nights} night${p.nights > 1 ? "s" : ""}` : "day trip", "accent")}</h3>
-          <div class="stays-grid stagger">
-            ${p.stays.map((s) => `<div class="stay card glass tilt">
+          <div class="stays-grid stagger in">
+            ${sorted.map((s) => `<div class="stay card glass tilt ${s.tier && s.tier !== tk ? "dim" : ""} ${s.pick && s.tier === tk ? "picked" : ""}">
+              ${s.pick && s.tier === tk ? `<div class="pick-badge">✓ Our ${TIER[U.state.style].label.toLowerCase()} pick</div>` : s.tier ? `<div class="tier-tag">${s.tier === "comfort" ? "🛏️ comfort" : "🎒 budget"}</div>` : ""}
               <div class="top"><div><div class="type">${h(s.type)}</div><h4>${h(s.name)}</h4></div>${s.rating ? `<span class="rating">★ ${s.rating}</span>` : ""}</div>
               <div class="price">${U.fmt(s.priceInr)}<small> /night pp</small></div>
               <div class="city">📍 ${h(p.area || p.name)}</div>
@@ -202,7 +214,18 @@
               <a class="btn small" href="${s.url}" target="_blank" rel="noopener">Check live price ↗</a>
             </div>`).join("")}
           </div>
-        </div>`).join("")}
+        </div>`;
+    }).join("");
+  }
+  function stays(D) {
+    return `
+    <section class="section" id="${D.id}-stays" style="padding-top:0">
+      <div class="container">
+        <div class="section-head reveal">
+          <div><span class="eyebrow">Sleep well · <span data-tier-word>${tierOf(D).label}</span> plan</span><h2>Where we <em>sleep</em></h2></div>
+          <p>Prices are per person per night (est.). Budget = dorms and shared rooms; Comfort = proper private rooms, boutique homestays and villas split by 3 — the picks for the active plan come first.</p>
+        </div>
+        <div data-stays>${staysInner(D)}</div>
       </div>
     </section>`;
   }
@@ -350,11 +373,32 @@
   }
 
   /* ---------------- behaviour ---------------- */
+  function renderTierCard(D, panel) {
+    const t = tierOf(D); const other = D.tiers && D.tiers[U.state.style === "mid" ? "budget" : "mid"];
+    const card = panel.querySelector("[data-tier-card]"); if (!card) return;
+    card.innerHTML = `<div class="tc-head"><span class="tc-icon">${t.icon || TIER[U.state.style].icon}</span><div><b>${h(t.label || TIER[U.state.style].label)} plan</b><span>${h(t.tagline || "")}</span></div></div>
+      ${t.bullets ? `<ul>${t.bullets.map((b) => `<li>${h(b)}</li>`).join("")}</ul>` : ""}
+      ${other ? `<div class="tiny" style="margin-top:8px">Switch to see the ${h(other.label)} plan: ${h(other.tagline || "")}</div>` : ""}`;
+    panel.querySelectorAll("[data-tier-word]").forEach((n) => (n.textContent = t.label || TIER[U.state.style].label));
+    panel.querySelectorAll("[data-seg=style] button").forEach((x) => x.classList.toggle("active", x.dataset.v === U.state.style));
+  }
+  function applyTier(D, panel) {
+    renderTierCard(D, panel);
+    const tl = panel.querySelector(".timeline");
+    if (tl) tl.innerHTML = `<div class="progress"></div>` + (D.itinerary || []).map((d, idx) => dayHtml(D, d, idx)).join("");
+    const st = panel.querySelector("[data-stays]");
+    if (st) st.innerHTML = staysInner(D);
+    initGallery(D, panel);
+    window.APP && APP.enhance(panel);
+    panel.dispatchEvent(new CustomEvent("tier:applied"));
+  }
+
   function initCalculator(D, panel) {
     const s = U.state;
     const q = (sel) => panel.querySelector(sel);
     const C = 2 * Math.PI * 80;
     let tickT = 0;
+    let lastStyle = s.style;
 
     function update() {
       const c = compute(D);
@@ -375,7 +419,7 @@
       q("[data-people-label]").textContent = c.people;
       q("[data-days-label]").textContent = c.days;
       q("[data-origin-label]").textContent = c.origin;
-      q("[data-style-label]").textContent = s.style === "mid" ? "mid-range" : "budget";
+      q("[data-style-label]").textContent = s.style === "mid" ? "comfort plan" : "budget plan";
       const max = Math.max(...Object.values(c.parts), 1);
       q("[data-breakdown]").innerHTML = Object.keys(COLORS).filter((k) => c.parts[k] > 0).map((k) => `<div class="row"><span class="muted">${LABELS[k]}</span><div class="bar"><i style="width:${(c.parts[k] / max) * 100}%;background:${COLORS[k]}"></i></div><b>${U.fmt(c.parts[k])}</b></div>`).join("");
       q("[data-out=people]").textContent = `${c.people} ${c.people === 1 ? "person" : "friends"}`;
@@ -386,6 +430,7 @@
       if (hd) hd.textContent = `${U.fmtDate(sd)} → ${U.fmtDate(U.addDays(c.start, c.days - 1))} 2027`;
       panel.querySelectorAll("input[type=range]").forEach((r) => r.style.setProperty("--pct", `${((r.value - r.min) / (r.max - r.min)) * 100}%`));
       renderWeather(c.month);
+      if (s.style !== lastStyle) { lastStyle = s.style; applyTier(D, panel); }
       updateDates();
       U.save();
       document.dispatchEvent(new CustomEvent("state:changed", { detail: { dest: D.id } }));
@@ -424,7 +469,7 @@
     panel.querySelectorAll("[data-seg]").forEach((seg) => seg.addEventListener("click", (e) => {
       const b = e.target.closest("button"); if (!b) return;
       seg.querySelectorAll("button").forEach((x) => x.classList.toggle("active", x === b));
-      if (seg.dataset.seg === "style") s.style = b.dataset.v; else { s.originBy = s.originBy || {}; s.originBy[D.id] = b.dataset.v; }
+      if (seg.dataset.seg === "style") { s.style = b.dataset.v; window.SFX && SFX.pop(); } else { s.originBy = s.originBy || {}; s.originBy[D.id] = b.dataset.v; }
       update();
     }));
     panel.querySelectorAll("[data-range]").forEach((r) => r.addEventListener("input", () => {
@@ -487,10 +532,10 @@
 
   function initTimeline(D, panel) {
     const tl = panel.querySelector(".timeline");
-    const prog = panel.querySelector(".timeline .progress");
     if (!tl) return;
     const onScroll = () => {
       if (panel.hidden) return;
+      const prog = tl.querySelector(".progress"); if (!prog) return;
       const r = tl.getBoundingClientRect();
       const mid = window.innerHeight * 0.5;
       prog.style.height = `${U.clamp((mid - r.top) / r.height, 0, 1) * 100}%`;
@@ -505,6 +550,7 @@
     panel.querySelectorAll("[data-lb-key]").forEach((n) => {
       const im = U.img(n.dataset.lbKey, Number(n.dataset.lbI || 0), 1600);
       const idx = items.push({ url: im.url, alt: im.alt, cap: n.dataset.lbCap || im.alt }) - 1;
+      if (n._lb) return; n._lb = true;
       n.addEventListener("click", (e) => { if (e.target.closest("[data-stop-lb]")) return; e.preventDefault(); window.APP && APP.openLightbox(items, idx); });
     });
   }
@@ -550,6 +596,7 @@
       return;
     }
     panel.innerHTML = hero(D) + stats(D) + dashboard(D) + mapSection(D) + itinerary(D) + stays(D) + experiences(D) + food(D) + flights(D) + watch(D) + essentials(D);
+    renderTierCard(D, panel);
     initCalculator(D, panel);
     initMap(D, panel);
     initTimeline(D, panel);

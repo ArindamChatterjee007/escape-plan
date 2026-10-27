@@ -32,10 +32,16 @@ An interactive, animated trip planner for a group of friends flying from Bangalo
 | `TASK.md` | The original build brief / specification |
 
 ## The answer in one line
-**Vietnam, Sat 19 Jun → Mon 28 Jun 2027, from Kolkata: ≈ ₹49,175 per head all-in on a budget (₹1,47,525 for three).** Weather-first alternative: Bali, Sat 12 – Sun 20 Jun 2027 from Bangalore, ≈ ₹57,905 per head. Full reasoning: [research/decision-summary.md](research/decision-summary.md).
+**Vietnam, Sat 19 Jun → Mon 28 Jun 2027, from Kolkata: ≈ ₹49,175 per head all-in on the Budget plan (₹1,47,525 for three) or ≈ ₹64,825 on the Comfort plan (private rooms, easy transport).** Weather-first alternative: Bali, Sat 12 – Sun 20 Jun 2027 from Bangalore, ≈ ₹57,905 / ₹73,865 per head. Full reasoning: [research/decision-summary.md](research/decision-summary.md).
 
 ## Status
 ✅ Complete and live. Data compiled 27 Oct 2026 — every price is an estimate; re-check live fares before booking.
+
+## Two plans
+**🎒 Budget** (dorms, street food, buses) and **🛏️ Comfort** (proper private rooms, Grab/private driver, guided days — smart spending, not luxury) are two complete plans behind one switch: every day's room, transport and per-head cost changes, stays re-rank to the plan's picks, and THE PLAN card shows both totals side by side.
+
+## When to go
+A month-by-month analysis of 2027 (flight price index, weather, crowds, holidays) with the cheapest departure days per month, the best month and the months to avoid — see the "When to go" section and `docs/data/months.js`.
 
 ## Video: ad-free by design
 The site never embeds YouTube. The cinema plays **46 free-licence clips** (Pexels / Mixkit) of the exact places on the route in **our own HTML5 player** — custom controls, scrubbing, HD toggle, speed, picture-in-picture, fullscreen, keyboard shortcuts, ambient glow and autoplay-next — so there are **no ads, ever**. Creator vlogs are offered only as outbound "watch on YouTube" links.

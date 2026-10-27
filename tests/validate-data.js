@@ -2,7 +2,7 @@
 // Validates the content/data files against the schema the renderer depends on,
 // and checks that the headline plan numbers equal what the live calculator computes.
 const { loadSite } = require("./load-site");
-const { IMAGES, VIDEOS, CLIPS, FLIGHTS, VIETNAM, BALI, U } = loadSite();
+const { IMAGES, VIDEOS, CLIPS, MONTHS_DATA, FLIGHTS, VIETNAM, BALI, U } = loadSite();
 
 const fails = [];
 const warns = [];
@@ -129,6 +129,20 @@ function checkDest(D, id) {
     }
     ok((p.food || []).length >= 2 && p.food.every((f) => f.dish && typeof f.priceInr === "number" && f.priceInr >= 0 && f.where), `${Q} food`);
   }
+  // Two real plans: Budget + Comfort
+  ok(D.tiers && D.tiers.budget && D.tiers.mid && D.tiers.mid.label === "Comfort" && D.tiers.mid.tagline && (D.tiers.mid.bullets || []).length >= 3, `${P} tiers.budget/mid (Comfort) with tagline + bullets`);
+  for (const p of D.places || []) {
+    ok((p.stays || []).every((s) => ["budget", "comfort"].includes(s.tier)), `${P} place ${p.id}: every stay needs tier budget|comfort`);
+    ok((p.stays || []).some((s) => s.tier === "comfort"), `${P} place ${p.id}: needs a comfort stay`);
+    ok((p.stays || []).filter((s) => s.pick && s.tier === "budget").length === 1 && (p.stays || []).filter((s) => s.pick && s.tier === "comfort").length === 1, `${P} place ${p.id}: exactly one budget pick and one comfort pick`);
+  }
+  for (const d of D.itinerary || []) {
+    const c = d.comfort;
+    ok(c && c.sleep && c.sleep.name && c.sleep.type && typeof c.sleep.priceInr === "number", `${P} day ${d.day}: comfort.sleep`);
+    ok(c && typeof c.ppCost === "number" && c.ppCost >= d.ppCost, `${P} day ${d.day}: comfort.ppCost ≥ budget ppCost`);
+    ok(c && Array.isArray(c.acts) && c.acts.every((o) => typeof o.i === "number" && d.acts[o.i]), `${P} day ${d.day}: comfort.acts overrides reference valid act indexes`);
+    ok(c && c.note, `${P} day ${d.day}: comfort.note`);
+  }
   ok(Array.isArray(D.itinerary) && D.itinerary.length === D.days, `${P} itinerary length ${D.itinerary && D.itinerary.length} ≠ days ${D.days}`);
   (D.itinerary || []).forEach((d, i) => {
     const Q = `${P} day ${d.day}:`;
@@ -179,6 +193,25 @@ for (const [D, id] of [[VIETNAM, "vietnam"], [BALI, "bali"]]) {
     const overlaps = !(D.plan.end < a.from || D.plan.start > a.to);
     warn(!overlaps, `${id}: recommended window overlaps avoid "${a.d}"`);
   }
+}
+
+/* ---------- when to go ---------- */
+if (MONTHS_DATA === null || MONTHS_DATA === undefined) warn(false, "MONTHS_DATA missing — When-to-go section shows a placeholder");
+else {
+  const M = MONTHS_DATA;
+  ok(Array.isArray(M.months) && M.months.length === 12, "MONTHS_DATA.months must have 12 entries");
+  (M.months || []).forEach((mo, i) => {
+    ok(mo.m === MONTHS[i] && mo.idx === i, `months[${i}] m/idx`);
+    for (const d of ["vietnam", "bali"]) { const x = mo[d]; ok(x && x.flightMult >= 0.9 && x.flightMult <= 2 && x.stayMult > 0.5 && x.weather && x.weather.icon && x.weather.label && ["Best", "Good", "OK", "Avoid"].includes(x.verdict), `months[${mo.m}].${d}`); }
+    ok(["Best", "Good", "OK", "Avoid"].includes(mo.badge) && mo.why, `months[${mo.m}] badge/why`);
+    ok(mo.cheapDays && (mo.cheapDays.vietnam || []).length >= 2 && (mo.cheapDays.bali || []).length >= 2 && [...mo.cheapDays.vietnam, ...mo.cheapDays.bali].every((d) => isIso(d) && d.startsWith(`2027-${String(i + 1).padStart(2, "0")}`)), `months[${mo.m}] cheapDays (ISO, within month)`);
+    ok((mo.holidays || []).every((x) => isIso(x.d) && x.name), `months[${mo.m}] holidays`);
+  });
+  ok(M.rules && (M.rules.departDays || []).length && M.rules.bookingLead && (M.rules.sales || []).length >= 2, "MONTHS_DATA.rules");
+  ok(M.best && MONTHS.includes(M.best.overall) && M.best.why, "MONTHS_DATA.best");
+  ok(Array.isArray(M.avoid) && M.avoid.length >= 2 && M.avoid.every((a) => MONTHS.includes(a.m) && a.why), "MONTHS_DATA.avoid");
+  for (const id of ["vietnam", "bali"]) { const p = (M.picks || {})[id]; ok(p && isIso(p.depart) && isIso(p.return) && (!p.alt || (isIso(p.alt.depart) && isIso(p.alt.return) && typeof p.alt.savingPct === "number")), `MONTHS_DATA.picks.${id}`); }
+  ok((M.sources || []).length >= 6 && M.sources.every((s) => isHttps(s.u)), "MONTHS_DATA.sources");
 }
 
 /* ---------- report ---------- */

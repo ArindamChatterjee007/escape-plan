@@ -17,9 +17,9 @@ window.BALI = {
     departTime: "Sat 12 Jun: BLR check-in around 00:15 IST, flight around 03:15 IST via KUL/SIN; seasonal direct only if operating. Illustrative timing, not a published 2027 service.",
     returnTime: "Sun 20 Jun: DPS night departure around 21:30 WITA via KUL/SIN; target BLR arrival Mon 21 Jun around 04:00–08:00 IST. Verify actual flights; home arrival can use a tenth calendar day.",
     perHeadBudget: 57905,
-    perHeadMid: 92655,
+    perHeadMid: 73865,
     groupTotal3: 173715,
-    summary: "Nine days with return flights from Bangalore cost about ₹57,900 per head on a budget (est.) or ₹92,700 mid-range (est.); three friends need roughly ₹1,74,000 on budget. June fares (≈₹21,000 return, est.) are cheaper than late May, the weather is dry, and we leave before the Indonesian school holidays and July price peak. The Sunday-night return lands in Bangalore early Monday 21 Jun — plan Monday off."
+    summary: "Nine days with return flights from Bangalore cost about ₹57,905 per head on Budget or ₹73,865 on Comfort (est.); three friends need roughly ₹1,73,715 on Budget. Comfort adds private rooms or a pool villa split by three, pre-booked drivers and guided excursions — smart spending, not luxury. June fares (≈₹21,000 return, est.) are cheaper than late May, the weather is dry, and we leave before the Indonesian school holidays and July price peak. The Sunday-night return lands in Bangalore early Monday 21 Jun — plan Monday off."
   },
   stats: [
     { icon: "✈️", k: "Return-flight target", v: "₹19,500", s: "BLR–DPS sale floor (est.); dates and baggage unverified" },
@@ -29,15 +29,20 @@ window.BALI = {
   ],
   budget: {
     budget: { stay: 900, food: 650, transport: 500, activities: 900 },
-    mid: { stay: 1900, food: 1100, transport: 800, activities: 1500 }
+    mid: { stay: 1700, food: 950, transport: 750, activities: 1300 }
+  },
+  tiers: {
+    budget: { label: "Budget", icon: "🎒", tagline: "Dorms, warungs, scooters — the island for the least money.", bullets: ["Hostel dorms ₹800–900 pp", "Warung meals ₹120–250", "Scooter or shared Grab/Gojek", "Group tours only where they beat DIY"] },
+    mid: { label: "Comfort", icon: "🛏️", tagline: "Private rooms or a pool villa split by 3, a driver on touring days — smart spending, not luxury.", bullets: ["Private guesthouse rooms / 2-bed pool villa ÷3 (₹1,500–2,000 pp)", "Private car + driver on Ubud, Penida and Uluwatu days (₹3,600 ÷ 3)", "Nusa Penida private tour & fast boat, guided Batur sunrise", "Sit-down local restaurants, one sunset dinner, one beach-club evening"] }
   },
   extras: [
     { k: "Visa on Arrival (est.)", v: 2600 },
     { k: "Bali tourist levy (est.)", v: 800 },
     { k: "SIM/eSIM (est.)", v: { budget: 500, mid: 700 } },
     { k: "Travel insurance (est.)", v: { budget: 900, mid: 1400 } },
-    { k: "Contingency reserve (est.)", v: { budget: 2000, mid: 3500 } },
-    { k: "Shared-driver / boat and excursion top-up (est.)", v: { budget: 3150, mid: 3600 } }
+    { k: "Checked bag 20 kg (Comfort)", v: { budget: 0, mid: 1800 } },
+    { k: "Shared-driver / boat and excursion top-up (est.)", v: { budget: 3150, mid: 0 } },
+    { k: "Contingency reserve (est.)", v: { budget: 2000, mid: 2500 } }
   ],
   places: [
     {
@@ -46,10 +51,10 @@ window.BALI = {
       why: "Three nights put the rice terraces, temples and a guided Batur sunrise within reach without changing beds. Start gently after the overnight flight; dry-season mornings improve volcano visibility, not guarantee it.",
       imgKey: "ubud",
       stays: [
-        { name: "In Da Lodge", type: "hostel", priceInr: 800, rating: "Verify live", url: "https://www.hostelworld.com/s?q=Ubud,%20Indonesia", note: "Dorm bed per person (est.); core itinerary choice. Seed-price target, not a live quote; check current reviews and availability." },
-        { name: "Puri Garden Hotel & Hostel", type: "hostel", priceInr: 900, rating: "Verify live", url: "https://www.hostelworld.com/s?q=Ubud,%20Indonesia", note: "Pool-hostel dorm target per person (est.); confirm the current room category and rate rather than assuming this sale price." },
-        { name: "Nirvana Pension / central Ubud homestay", type: "homestay", priceInr: 900, rating: "Verify live", url: "https://www.booking.com/searchresults.html?ss=Nirvana+Pension+Ubud&group_adults=3&no_rooms=1&selected_currency=INR", note: "Target triple-room total ₹2,700/night ÷3 = ₹900 pp (est.); confirm three-adult occupancy and any extra-bed charge." },
-        { name: "Ubud 3-bedroom jungle villa — search target", type: "villa", priceInr: 2800, rating: "Verify live", url: "https://www.booking.com/searchresults.html?ss=Ubud+3+bedroom+jungle+villa&group_adults=3&no_rooms=1&selected_currency=INR", note: "₹8,400/night ÷3 = ₹2,800 pp · ÷4 = ₹2,100 pp (est.). Whole 3-bedroom villa target, not a specific listing; check pool privacy, taxes, access and legal occupancy." }
+        { name: "In Da Lodge", type: "hostel", tier: "budget", pick: true, priceInr: 800, rating: "Verify live", url: "https://www.hostelworld.com/s?q=Ubud,%20Indonesia", note: "Dorm bed per person (est.); core itinerary choice. Seed-price target, not a live quote; check current reviews and availability." },
+        { name: "Puri Garden Hotel & Hostel", type: "hostel", tier: "budget", priceInr: 900, rating: "Verify live", url: "https://www.hostelworld.com/s?q=Ubud,%20Indonesia", note: "Pool-hostel dorm target per person (est.); confirm the current room category and rate rather than assuming this sale price." },
+        { name: "Nirvana Pension / central Ubud homestay", type: "homestay", tier: "comfort", pick: true, priceInr: 1600, rating: "Verify live", url: "https://www.booking.com/searchresults.html?ss=Nirvana+Pension+Ubud&group_adults=3&no_rooms=1&selected_currency=INR", note: "Private double ₹3,200/night ÷2 = ₹1,600 pp (est.); for three friends, target a proper triple/family room around ₹4,800 total, otherwise price the extra room explicitly. Confirm A/C, private bathroom, taxes and recent reviews; not a live quote." },
+        { name: "Ubud 3-bedroom jungle villa — search target", type: "villa", tier: "comfort", priceInr: 2800, rating: "Verify live", url: "https://www.booking.com/searchresults.html?ss=Ubud+3+bedroom+jungle+villa&group_adults=3&no_rooms=1&selected_currency=INR", note: "₹8,400/night ÷3 = ₹2,800 pp · ÷4 = ₹2,100 pp (est.). Whole 3-bedroom villa target, not a specific listing; check pool privacy, taxes, access and legal occupancy." }
       ],
       activities: [
         { name: "Campuhan Ridge walk", lat: -8.5000, lng: 115.2538, costInr: 0, bestTime: "06:30–08:00, before the heat", desc: "No admission budgeted (est.); follow the public ridge path. Save this for Day 2 if the incoming connection is late.", imgKey: "ubud", social: "https://www.instagram.com/explore/tags/campuhanridgewalk/" },
@@ -73,9 +78,9 @@ window.BALI = {
       why: "One night gives the west-coast viewpoints a full afternoon and an early snorkel departure. Stay near the harbour, use a driver, and choose manta snorkelling OR the far-east Diamond Beach route before returning to Bali.",
       imgKey: "kelingking",
       stays: [
-        { name: "Nuansa Penida Hostel", type: "hostel", priceInr: 900, rating: "Verify live", url: "https://www.hostelworld.com/s?q=Nusa%20Penida,%20Indonesia", note: "Dorm bed per person (est.); core overnight choice. Confirm actual harbour pickup point and transfer inclusion." },
-        { name: "Toya Pakeh triple homestay — search target", type: "homestay", priceInr: 700, rating: "Verify live", url: "https://www.booking.com/searchresults.html?ss=Toya+Pakeh+Nusa+Penida+homestay&group_adults=3&no_rooms=1&selected_currency=INR", note: "Target ₹2,100/night for a triple ÷3 = ₹700 pp (est.); verify air-conditioning, three-adult occupancy and recent reviews." },
-        { name: "Penida Bambu Green", type: "hotel", priceInr: 1600, rating: "Verify live", url: "https://www.agoda.com/en-in/search?textToSearch=Penida%20Bambu%20Green", note: "Per-head target from a ₹4,800 three-adult room/package (est.); confirm the room and extra-bed policy. Hillside transfers may cost more than a harbour-area stay." }
+        { name: "Nuansa Penida Hostel", type: "hostel", tier: "budget", pick: true, priceInr: 900, rating: "Verify live", url: "https://www.hostelworld.com/s?q=Nusa%20Penida,%20Indonesia", note: "Dorm bed per person (est.); core overnight choice. Confirm actual harbour pickup point and transfer inclusion." },
+        { name: "Toya Pakeh private guesthouse — search target", type: "homestay", tier: "comfort", pick: true, priceInr: 1700, rating: "Verify live", url: "https://www.booking.com/searchresults.html?ss=Toya+Pakeh+Nusa+Penida+homestay&group_adults=3&no_rooms=1&selected_currency=INR", note: "Harbour-area private double ₹3,400/night ÷2 = ₹1,700 pp (est.); for three, request a proper triple/family quote near ₹5,100 total rather than assuming a free extra bed. Confirm A/C, private bathroom, recent reviews and harbour pickup; not a live quote." },
+        { name: "Penida Bambu Green", type: "hotel", tier: "comfort", priceInr: 1600, rating: "Verify live", url: "https://www.agoda.com/en-in/search?textToSearch=Penida%20Bambu%20Green", note: "Per-head target from a ₹4,800 three-adult room/package (est.); confirm the room and extra-bed policy. Hillside transfers may cost more than a harbour-area stay." }
       ],
       activities: [
         { name: "Kelingking cliff viewpoint", lat: -8.7503, lng: 115.4737, costInr: 130, bestTime: "10:30–12:00 after the morning boat", desc: "Access/parking allowance (est.); core plan stays on the marked cliff-top viewpoint. Do not attempt the steep beach descent or swim in powerful surf.", imgKey: "kelingking", social: "https://www.instagram.com/explore/tags/kelingkingbeach/" },
@@ -98,9 +103,10 @@ window.BALI = {
       why: "Two nights give a beach morning and a proper Uluwatu Temple–Kecak evening after the island crossing. Pre-arrange short shared-car trips: distances and pickup restrictions make this less walkable than central Ubud.",
       imgKey: "uluwatuTemple",
       stays: [
-        { name: "Padang Padang budget triple guesthouse — search target", type: "private", priceInr: 900, rating: "Verify live", url: "https://www.booking.com/searchresults.html?ss=Padang+Padang+Uluwatu+guesthouse&group_adults=3&no_rooms=1&selected_currency=INR", note: "Core target: ₹2,700/night for three adults ÷3 = ₹900 pp (est.). Not a named confirmed property; insist on a genuine triple-room quote." },
-        { name: "Padang Padang Inn", type: "hotel", priceInr: 1200, rating: "Verify live", url: "https://www.booking.com/searchresults.html?ss=Padang+Padang+Inn+Uluwatu&group_adults=3&no_rooms=1&selected_currency=INR", note: "Target allocation ₹3,600/night ÷3 = ₹1,200 pp (est.); confirm a three-adult room/extra bed and taxes before comparing." },
-        { name: "Barong Bungalows", type: "private", priceInr: 1400, rating: "Verify live", url: "https://www.agoda.com/en-in/search?textToSearch=Barong%20Bungalows%20Uluwatu", note: "Target three-person allocation ₹4,200/night ÷3 = ₹1,400 pp (est.); verify the exact property location and current occupancy options." }
+        { name: "Padang Padang / Pecatu hostel dorm — search target", type: "hostel", tier: "budget", pick: true, priceInr: 900, rating: "Verify live", url: "https://www.hostelworld.com/s?q=Uluwatu,%20Indonesia", note: "Dorm-bed target per person (est.), matching the existing ₹900 budget allowance. Confirm recent reviews, A/C, lockers and three separate beds; this is a search target, not confirmed inventory." },
+        { name: "Padang Padang budget triple guesthouse — search target", type: "private", tier: "comfort", priceInr: 900, rating: "Verify live", url: "https://www.booking.com/searchresults.html?ss=Padang+Padang+Uluwatu+guesthouse&group_adults=3&no_rooms=1&selected_currency=INR", note: "Core target: ₹2,700/night for three adults ÷3 = ₹900 pp (est.). Not a named confirmed property; insist on a genuine triple-room quote." },
+        { name: "Padang Padang Inn", type: "hotel", tier: "comfort", pick: true, priceInr: 1800, rating: "Verify live", url: "https://www.booking.com/searchresults.html?ss=Padang+Padang+Inn+Uluwatu&group_adults=3&no_rooms=1&selected_currency=INR", note: "Private double ₹3,600/night ÷2 = ₹1,800 pp (est.); three friends need a confirmed triple/family room near ₹5,400 total or a separately priced second room. Check A/C, private bathroom, taxes and current reviews; a value hotel, not a resort package." },
+        { name: "Barong Bungalows", type: "private", tier: "comfort", priceInr: 1400, rating: "Verify live", url: "https://www.agoda.com/en-in/search?textToSearch=Barong%20Bungalows%20Uluwatu", note: "Target three-person allocation ₹4,200/night ÷3 = ₹1,400 pp (est.); verify the exact property location and current occupancy options." }
       ],
       activities: [
         { name: "Uluwatu Temple cliff walk", lat: -8.8291, lng: 115.0849, costInr: 270, bestTime: "16:00–17:15 before Kecak", desc: "Temple entry allowance (est.), separate from the dance ticket. Wear a sarong, respect worship areas and secure phones/glasses around monkeys.", imgKey: "uluwatuTemple", social: "https://www.instagram.com/explore/tags/uluwatutemple/" },
@@ -122,10 +128,10 @@ window.BALI = {
       why: "Two nights leave one unrushed surf-and-Tanah-Lot day. Dorms keep the baseline affordable; a two-bedroom pool villa is a clearly priced upgrade, especially if a fourth friend joins.",
       imgKey: "canggu",
       stays: [
-        { name: "Lay Day Surf Hostel", type: "hostel", priceInr: 900, rating: "Verify live", url: "https://www.hostelworld.com/s?q=Canggu,%20Indonesia", note: "Dorm bed per person (est.); core itinerary choice. Check noise, exact location and current reviews before booking." },
-        { name: "Kos One Hostel", type: "hostel", priceInr: 1100, rating: "Verify live", url: "https://www.hostelworld.com/s?q=Canggu,%20Indonesia", note: "Pool-hostel dorm target per person (est.); social spaces can be busy and this is not a guaranteed 2027 quote." },
-        { name: "Tribal Bali", type: "hostel", priceInr: 1000, rating: "Verify live", url: "https://www.booking.com/searchresults.html?ss=Tribal+Bali+Canggu&group_adults=3&no_rooms=1&selected_currency=INR", note: "Dorm target per person (est.); Pererenan location may add transport costs. Confirm three separate beds in the selected inventory." },
-        { name: "Canggu 2-bedroom private-pool villa — search target", type: "villa", priceInr: 2200, rating: "Verify live", url: "https://www.booking.com/searchresults.html?ss=Canggu+2+bedroom+private+pool+villa&group_adults=3&no_rooms=1&selected_currency=INR", note: "₹6,600/night ÷3 = ₹2,200 pp · ÷4 = ₹1,650 pp (est.). Whole 2-bedroom villa; confirm private pool, total taxes, room layout and four-adult occupancy. Upgrade, not the dorm baseline." }
+        { name: "Lay Day Surf Hostel", type: "hostel", tier: "budget", pick: true, priceInr: 900, rating: "Verify live", url: "https://www.hostelworld.com/s?q=Canggu,%20Indonesia", note: "Dorm bed per person (est.); core itinerary choice. Check noise, exact location and current reviews before booking." },
+        { name: "Kos One Hostel", type: "hostel", tier: "budget", priceInr: 1100, rating: "Verify live", url: "https://www.hostelworld.com/s?q=Canggu,%20Indonesia", note: "Pool-hostel dorm target per person (est.); social spaces can be busy and this is not a guaranteed 2027 quote." },
+        { name: "Tribal Bali", type: "hostel", tier: "budget", priceInr: 1000, rating: "Verify live", url: "https://www.booking.com/searchresults.html?ss=Tribal+Bali+Canggu&group_adults=3&no_rooms=1&selected_currency=INR", note: "Dorm target per person (est.); Pererenan location may add transport costs. Confirm three separate beds in the selected inventory." },
+        { name: "Canggu 2-bedroom private-pool villa — search target", type: "villa", tier: "comfort", pick: true, priceInr: 2200, rating: "Verify live", url: "https://www.booking.com/searchresults.html?ss=Canggu+2+bedroom+private+pool+villa&group_adults=3&no_rooms=1&selected_currency=INR", note: "₹6,600/night ÷3 = ₹2,200 pp · ÷4 = ₹1,650 pp (est.). Whole 2-bedroom villa; confirm private pool, total taxes, room layout and four-adult occupancy. Upgrade, not the dorm baseline." }
       ],
       activities: [
         { name: "Batu Bolong beginner surf lesson", lat: -8.6594, lng: 115.1301, costInr: 1700, bestTime: "07:00–09:00, tide-dependent", desc: "Two-hour lesson including board and instructor (est.); check sea conditions and choose a beginner break. The core plan includes this lesson once.", imgKey: "surfing", social: "https://www.youtube.com/results?search_query=canggu+batu+bolong+beginner+surf+lesson" },
@@ -147,10 +153,10 @@ window.BALI = {
       why: "A zero-night brunch-and-beach stop on the way to DPS, not an extra hotel move. Villa options are alternatives to the two Canggu nights; leave before sunset to protect the night-flight check-in buffer.",
       imgKey: "seminyak",
       stays: [
-        { name: "Capsule Hotel New Seminyak", type: "hostel", priceInr: 800, rating: "Verify live", url: "https://www.hostelworld.com/s?q=Seminyak,%20Indonesia", note: "Dorm/capsule bed per person (est.); optional substitute for Canggu, not a ninth included hotel night. Verify current trading name and reviews." },
-        { name: "Kosta Hostel", type: "hostel", priceInr: 900, rating: "Verify live", url: "https://www.booking.com/searchresults.html?ss=Kosta+Hostel+Seminyak&group_adults=3&no_rooms=1&selected_currency=INR", note: "Dorm bed target per person (est.); check current operation, room category and distance from the beach. No Seminyak overnight is included." },
-        { name: "Seminyak 2-bedroom private-pool villa — search target", type: "villa", priceInr: 2600, rating: "Verify live", url: "https://www.booking.com/searchresults.html?ss=Seminyak+2+bedroom+private+pool+villa&group_adults=3&no_rooms=1&selected_currency=INR", note: "₹7,800/night ÷3 = ₹2,600 pp · ÷4 = ₹1,950 pp (est.). Whole 2-bedroom villa; replace Canggu nights rather than adding a ninth night. Confirm total taxes, private pool and maximum occupancy." },
-        { name: "⭐ The villa you shortlisted: 2 Bedroom private Pool Seminyak", type: "villa", priceInr: 7410, rating: 9.8, url: "https://www.booking.com/hotel/id/2-bedroom-private-pool-seminyak.en-gb.html?checkin=2027-06-18&checkout=2027-06-20&group_adults=4&no_rooms=1&selected_currency=INR", note: "Seen on Booking.com at ₹44,449 for 2 nights / 4 adults (Feb 2027 dates) ≈ ₹22,225/night → ₹7,410 pp at 3 · ₹5,560 pp at 4. 250 m², 2 bedrooms, 2 bathrooms, private pool, rated 9.8 (3 reviews). A splurge for the last two nights (18–20 Jun) instead of the Canggu hostel — re-check June pricing." }
+        { name: "Capsule Hotel New Seminyak", type: "hostel", tier: "budget", pick: true, priceInr: 800, rating: "Verify live", url: "https://www.hostelworld.com/s?q=Seminyak,%20Indonesia", note: "Dorm/capsule bed per person (est.); optional substitute for Canggu, not a ninth included hotel night. Verify current trading name and reviews." },
+        { name: "Kosta Hostel", type: "hostel", tier: "budget", priceInr: 900, rating: "Verify live", url: "https://www.booking.com/searchresults.html?ss=Kosta+Hostel+Seminyak&group_adults=3&no_rooms=1&selected_currency=INR", note: "Dorm bed target per person (est.); check current operation, room category and distance from the beach. No Seminyak overnight is included." },
+        { name: "Seminyak 2-bedroom private-pool villa — search target", type: "villa", tier: "comfort", pick: true, priceInr: 2600, rating: "Verify live", url: "https://www.booking.com/searchresults.html?ss=Seminyak+2+bedroom+private+pool+villa&group_adults=3&no_rooms=1&selected_currency=INR", note: "₹7,800/night ÷3 = ₹2,600 pp · ÷4 = ₹1,950 pp (est.). Whole 2-bedroom villa; replace Canggu nights rather than adding a ninth night. Confirm total taxes, private pool and maximum occupancy." },
+        { name: "⭐ The villa you shortlisted: 2 Bedroom private Pool Seminyak", type: "villa", tier: "comfort", priceInr: 7410, rating: 9.8, url: "https://www.booking.com/hotel/id/2-bedroom-private-pool-seminyak.en-gb.html?checkin=2027-06-18&checkout=2027-06-20&group_adults=4&no_rooms=1&selected_currency=INR", note: "Seen on Booking.com at ₹44,449 for 2 nights / 4 adults (Feb 2027 dates) ≈ ₹22,225/night → ₹7,410 pp at 3 · ₹5,560 pp at 4. 250 m², 2 bedrooms, 2 bathrooms, private pool, rated 9.8 (3 reviews). A splurge for the last two nights (18–20 Jun) instead of the Canggu hostel — re-check June pricing." }
       ],
       activities: [
         { name: "Double Six beach walk", lat: -8.6995, lng: 115.1627, costInr: 0, bestTime: "15:30 on flight day; depart by 16:30", desc: "Public-beach access allowance (est.); choose late-afternoon light rather than sunset on Day 9. Allow 1.5–2 hours to DPS plus three hours for international check-in.", imgKey: "seminyak", social: "https://www.instagram.com/explore/tags/doublesixbeach/" },
@@ -194,7 +200,17 @@ window.BALI = {
         { t: "16:00", name: "Shared car to Ubud", desc: "Pre-booked airport car split three ways (est.); allow 2–3 hours and move the time if immigration or the connection is slow.", costInr: 900, imgKey: "ubud", lat: -8.5069, lng: 115.2625 },
         { t: "19:00", name: "Check in, warung dinner and an early night", desc: "Includes the day's complete food allowance (est.), not just dinner. Leave Campuhan for tomorrow's cooler morning.", costInr: 650, imgKey: "nasiGoreng", social: "https://www.instagram.com/explore/tags/ubud/" }
       ],
-      sleep: { name: "In Da Lodge dorm", type: "hostel", priceInr: 800 }, ppCost: 2350
+      sleep: { name: "In Da Lodge dorm", type: "hostel", priceInr: 800 }, ppCost: 2350,
+      comfort: {
+        sleep: { name: "Nirvana Pension / central Ubud homestay", type: "private double", priceInr: 1600 },
+        ppCost: 3550,
+        acts: [
+          { i: 0, name: "Bangalore check-in with the pre-booked 20 kg bag", desc: "Meet three hours before departure and check the baggage allowance on every connecting sector. The ₹1,800 checked-bag estimate is counted once in Comfort extras for the return itinerary, not again in this ground-day spend; verify the airline quote." },
+          { i: 3, name: "Private airport transfer to Ubud, pre-booked", desc: "Car reserved for the three friends: ₹3,000 ÷3 = ₹1,000 pp (est.), including agreed airport pickup and luggage space. Allow 2–3 hours after immigration and share flight details so the driver can adjust for delays.", costInr: 1000 },
+          { i: 4, name: "Private-room check-in, local-restaurant dinner and rest", desc: "Settle into the homestay and eat at a well-rated local restaurant nearby. ₹950 is the whole-day food allowance (est.), not dinner alone; keep the first evening easy after the overnight flight.", costInr: 950 }
+        ],
+        note: "A quiet private room, a pre-booked airport car and a 20 kg checked bag in extras make arrival easy without resort prices."
+      }
     },
     {
       day: 2, placeId: "ubud", title: "Rice terraces, temple water and a waterfall", imgKey: "tegallalang", imgI: 1,
@@ -206,7 +222,16 @@ window.BALI = {
         { t: "14:00", name: "Tegenungan viewpoint and waterfall stairs", desc: "Basic entry (est.); take a shaded lunch break before walking down. Obey barriers and water-access advice.", costInr: 130, imgKey: "tegenungan", lat: -8.5752, lng: 115.2888 },
         { t: "18:30", name: "Market streets and warung dinner", desc: "Whole-day food allowance (est.); souvenir purchases are excluded. Sleep early for the Batur pickup.", costInr: 650, imgKey: "nasiGoreng" }
       ],
-      sleep: { name: "In Da Lodge dorm", type: "hostel", priceInr: 800 }, ppCost: 3110
+      sleep: { name: "In Da Lodge dorm", type: "hostel", priceInr: 800 }, ppCost: 3110,
+      comfort: {
+        sleep: { name: "Nirvana Pension / central Ubud homestay", type: "private double", priceInr: 1600 },
+        ppCost: 4410,
+        acts: [
+          { i: 1, name: "Private driver for 10 h and Tegallalang", desc: "₹3,600/car ÷3 = ₹1,200 pp plus ₹130 terrace access (est.). Reserve the car exclusively for the friends, with flexible temple, lunch and waterfall stops; agree fuel, parking and overtime. The same driver covers the full loop, with no second transport charge or swing package.", costInr: 1330 },
+          { i: 4, name: "Market streets and a good local-restaurant dinner", desc: "₹950 covers the full day of sit-down local meals (est.); choose well-reviewed places rather than resort restaurants. Souvenirs are extra; return to the private room early for Batur.", costInr: 950 }
+        ],
+        note: "An exclusive full-day driver lets us change stops freely; a private room and good local meals add comfort without luxury markups."
+      }
     },
     {
       day: 3, placeId: "ubud", title: "Mount Batur sunrise, then slow Ubud", imgKey: "mountBatur", imgI: 2,
@@ -217,7 +242,17 @@ window.BALI = {
         { t: "15:30", name: "Monkey Forest", desc: "Monday weekday entry allowance (est.); keep food packed away and secure glasses, jewellery and phones.", costInr: 530, imgKey: "monkeyForest", social: "https://www.instagram.com/explore/tags/ubudmonkeyforest/", lat: -8.5188, lng: 115.2588 },
         { t: "19:00", name: "Warung dinner and pack for Penida", desc: "Daily food allowance (est.); the tour breakfast can leave room for snacks. Confirm tomorrow's boat harbour and pickup tonight.", costInr: 650, imgKey: "satay" }
       ],
-      sleep: { name: "In Da Lodge dorm", type: "hostel", priceInr: 800 }, ppCost: 4680
+      sleep: { name: "In Da Lodge dorm", type: "hostel", priceInr: 800 }, ppCost: 4680,
+      comfort: {
+        sleep: { name: "Nirvana Pension / central Ubud homestay", type: "private double", priceInr: 1600 },
+        ppCost: 6080,
+        acts: [
+          { i: 0, name: "Guided Batur sunrise trek with private Ubud pickup", desc: "Pre-book a permitted guide, private pickup/return for the three friends, entry and simple breakfast for about ₹3,000 pp (est.); confirm all inclusions and current access. No separate driver fee; keep the warm layer and late-morning return.", costInr: 3000 },
+          { i: 1, name: "Recover in the private homestay room", desc: "Shower and sleep without dorm noise after the early trek. The room is already in tonight’s stay price; no extra activity charge or long excursion." },
+          { i: 3, name: "Local-restaurant dinner and pack for Penida", desc: "₹950 is the day’s complete food allowance (est.), with the simple trek breakfast included in the tour rather than charged twice. Confirm tomorrow’s harbour transfer, boat tickets and island driver tonight.", costInr: 950 }
+        ],
+        note: "A pre-arranged guide and private return pickup remove trek logistics, while the quiet room makes the recovery break worthwhile."
+      }
     },
     {
       day: 4, placeId: "nusapenida", title: "Sanur fast boat and Penida's western cliffs", imgKey: "kelingking", imgI: 0,
@@ -229,7 +264,17 @@ window.BALI = {
         { t: "13:30", name: "Broken Beach and Angel's Billabong", desc: "Combined access allowance (est.); keep to marked viewpoints. No swimming in the exposed Billabong pool.", costInr: 130, imgKey: "kelingking", lat: -8.7301, lng: 115.4475 },
         { t: "17:00", name: "Crystal Bay shoreline and warung food", desc: "Beach stop plus the full day's food allowance (est.); driver parking is included in the agreed quote. Return to the harbour-side hostel after sunset.", costInr: 650, imgKey: "mantaRay", social: "https://www.instagram.com/explore/tags/crystalbay/", lat: -8.7147, lng: 115.4583 }
       ],
-      sleep: { name: "Nuansa Penida Hostel dorm", type: "hostel", priceInr: 900 }, ppCost: 4290
+      sleep: { name: "Nuansa Penida Hostel dorm", type: "hostel", priceInr: 900 }, ppCost: 4290,
+      comfort: {
+        sleep: { name: "Toya Pakeh private guesthouse — search target", type: "private double", priceInr: 1700 },
+        ppCost: 5540,
+        acts: [
+          { i: 0, name: "Private harbour transfer; fast boat + Penida tour pre-booked", desc: "Ubud–Sanur car reserved for three: ₹1,500 ÷3 = ₹500 pp (est.). Book the ₹1,600 pp return fast boat and exclusive Penida driver together in advance; boat legs and island driver are charged in their own activity rows, not again here. Keep the 08:00 harbour check-in target.", costInr: 500 },
+          { i: 2, name: "Private Penida driver and Kelingking viewpoint", desc: "Exclusive island car for the friends: ₹3,600 ÷3 = ₹1,200 pp plus ₹130 viewpoint access (est.). The pre-booked private tour includes the later west-coast stops and guesthouse drop-off; confirm parking and waiting time. Stay on the marked cliff-top paths; no duplicate driver charge." },
+          { i: 4, name: "Crystal Bay sunset and local-restaurant dinner", desc: "Enjoy the shoreline, then a well-rated local restaurant and the harbour-area private guesthouse. ₹950 covers all today’s meals (est.); driver parking is in the agreed quote. No unguided offshore swimming.", costInr: 950 }
+        ],
+        note: "Pre-booked fast boats, a private island tour and a harbour-side private room replace on-arrival logistics; transport and excursions are already in the daily spend."
+      }
     },
     {
       day: 5, placeId: "uluwatu", title: "Manta morning OR Diamond Beach → back to Uluwatu", imgKey: "mantaRay", imgI: 1,
@@ -240,7 +285,16 @@ window.BALI = {
         { t: "14:00", name: "Fast boat back to Sanur", desc: "Return half of the ₹1,600 round-trip boat budget (est.); do not add another full return ticket. Weather and operator timetables override this target time.", costInr: 800, imgKey: "kelingking", lat: -8.6887, lng: 115.2626 },
         { t: "16:00", name: "Sanur → Uluwatu shared car", desc: "Pre-arranged transfer split three ways (est.); aim for an easy check-in and dinner rather than a fixed-time evening attraction.", costInr: 550, imgKey: "padangPadang", lat: -8.8109, lng: 115.1034 }
       ],
-      sleep: { name: "Padang Padang budget triple guesthouse", type: "private", priceInr: 900 }, ppCost: 4400
+      sleep: { name: "Padang Padang budget triple guesthouse", type: "private", priceInr: 900 }, ppCost: 4400,
+      comfort: {
+        sleep: { name: "Padang Padang Inn", type: "hotel", priceInr: 1800 },
+        ppCost: 5850,
+        acts: [
+          { i: 1, name: "Local-restaurant lunch, bags and harbour check-in", desc: "₹950 covers the complete day’s meals (est.), including an easy restaurant dinner after check-in. Keep the guided shared snorkel for value and reach the correct harbour 45–60 minutes before the pre-booked afternoon sailing.", costInr: 950 },
+          { i: 3, name: "Private Sanur → Uluwatu hotel transfer", desc: "A car reserved for the three friends: ₹2,400 ÷3 = ₹800 pp (est.). Give the driver the boat details and agree flexible pickup, luggage space and traffic delays; go straight to the private hotel room rather than chasing another attraction.", costInr: 800 }
+        ],
+        note: "Keep the good-value guided snorkel and fast boat, then upgrade to a private mainland transfer and a proper hotel room for an easy landing."
+      }
     },
     {
       day: 6, placeId: "uluwatu", title: "Padang Padang, cliff temple and sunset Kecak", imgKey: "kecak", imgI: 2,
@@ -252,7 +306,16 @@ window.BALI = {
         { t: "16:00", name: "Uluwatu Temple cliff path", desc: "Temple-entry allowance (est.); use a sarong and secure belongings around the monkeys.", costInr: 270, imgKey: "uluwatuTemple", social: "https://www.instagram.com/explore/tags/uluwatutemple/", lat: -8.8291, lng: 115.0849 },
         { t: "18:00", name: "Kecak sunset performance", desc: "Dance ticket only (est.); temple admission was counted separately. Confirm the 2027 show time and arrive early for seating.", costInr: 800, imgKey: "kecak", social: "https://www.youtube.com/results?search_query=uluwatu+kecak+sunset+performance", lat: -8.8295, lng: 115.0849 }
       ],
-      sleep: { name: "Padang Padang budget triple guesthouse", type: "private", priceInr: 900 }, ppCost: 3000
+      sleep: { name: "Padang Padang budget triple guesthouse", type: "private", priceInr: 900 }, ppCost: 3000,
+      comfort: {
+        sleep: { name: "Padang Padang Inn", type: "hotel", priceInr: 1800 },
+        ppCost: 5100,
+        acts: [
+          { i: 1, name: "Local-restaurant lunch and shaded downtime", desc: "₹950 covers all day’s food (est.), including dinner after Kecak at a well-rated local restaurant. No resort buffet or beach-club daybed is assumed.", costInr: 950 },
+          { i: 2, name: "Private driver for the Uluwatu touring afternoon", desc: "₹3,600/car ÷3 = ₹1,200 pp (est.) buys a flexible private hire, up to 10 hours, for the temple loop, cafe stops and post-Kecak dinner/return. Walk to the nearby morning beach or agree a later beach stop within the hire; confirm pickup zones, fuel, parking and overtime. No separate temple-transfer charge.", costInr: 1200 }
+        ],
+        note: "A private driver stays available through the temple, Kecak and dinner, while a value hotel keeps the upgrade practical rather than luxurious."
+      }
     },
     {
       day: 7, placeId: "canggu", title: "Melasti beach → Canggu's public shoreline", imgKey: "canggu", imgI: 0,
@@ -264,7 +327,17 @@ window.BALI = {
         { t: "17:00", name: "Batu Bolong sunset from the sand", desc: "Public-shore visit with no admission allowance (est.); skip reserved club daybeds in the budget plan.", costInr: 0, imgKey: "canggu", social: "https://www.instagram.com/explore/tags/batubolong/", lat: -8.6594, lng: 115.1301 },
         { t: "19:00", name: "Warung dinner and surf booking", desc: "Full-day food allowance (est.); check the instructor's morning meeting point, tide and equipment inclusions.", costInr: 650, imgKey: "nasiGoreng" }
       ],
-      sleep: { name: "Lay Day Surf Hostel dorm", type: "hostel", priceInr: 900 }, ppCost: 2280
+      sleep: { name: "Lay Day Surf Hostel dorm", type: "hostel", priceInr: 900 }, ppCost: 2280,
+      comfort: {
+        sleep: { name: "Canggu 2-bedroom private-pool villa — search target", type: "villa (÷3)", priceInr: 2200 },
+        ppCost: 4280,
+        acts: [
+          { i: 2, name: "Private pool-villa check-in and rest", desc: "Settle into the two-bedroom villa: ₹6,600/night ÷3 = ₹2,200 pp (est.), counted in the stay below. Confirm the room layout and three-adult occupancy; enjoy the pool without paying for a resort or a separate activity." },
+          { i: 3, name: "Sunset dinner at a well-rated local beach restaurant", desc: "Choose a simple sea-facing table near Batu Bolong, not a resort or daybed package. Allocate about ₹500 of today’s ₹950 food allowance to this one sunset dinner; that allowance is counted at 19:00, so there is no second dinner charge. Stay ashore after dark." },
+          { i: 4, name: "One relaxed beach-club evening — no daybed", desc: "₹950 for the full day’s meals, including sunset dinner, plus ₹400 for modest beach-club entry/drink spending (est.). Confirm ordinary walk-in/bar seating, choose a venue that fits this cap and skip reserved daybeds or ticketed events. Confirm tomorrow’s surf meeting point; do not add another dinner allowance.", costInr: 1350 }
+        ],
+        note: "A pool villa split three ways, one sunset dinner and one modest beach-club evening buy atmosphere without luxury daybed minimums."
+      }
     },
     {
       day: 8, placeId: "canggu", title: "First waves, a slow lunch and Tanah Lot sunset", imgKey: "tanahLot", imgI: 1,
@@ -275,7 +348,16 @@ window.BALI = {
         { t: "15:30", name: "Tanah Lot with a shared return car", desc: "₹400 entry plus ₹400 pp return-car allowance (est.). Reach the viewpoints before sunset; respect tide closures and sacred inner areas.", costInr: 800, imgKey: "tanahLot", social: "https://www.instagram.com/explore/tags/tanahlot/", lat: -8.6212, lng: 115.0868 },
         { t: "19:30", name: "Echo Beach-area warung dinner", desc: "Complete daily food allowance (est.); use public shore paths rather than a reserved beach-club seat. No after-dark swimming.", costInr: 650, imgKey: "satay", lat: -8.6526, lng: 115.1259 }
       ],
-      sleep: { name: "Lay Day Surf Hostel dorm", type: "hostel", priceInr: 900 }, ppCost: 4050
+      sleep: { name: "Lay Day Surf Hostel dorm", type: "hostel", priceInr: 900 }, ppCost: 4050,
+      comfort: {
+        sleep: { name: "Canggu 2-bedroom private-pool villa — search target", type: "villa (÷3)", priceInr: 2200 },
+        ppCost: 5850,
+        acts: [
+          { i: 2, name: "Tanah Lot with a pre-booked private return car", desc: "₹400 temple entry plus ₹600 pp for a private return car (₹1,800 ÷3, est.), including the agreed sunset wait. The same car brings the friends back to Canggu; respect traffic buffers, tide closures and sacred inner areas.", costInr: 1000 },
+          { i: 3, name: "Echo Beach-area local-restaurant dinner", desc: "₹950 covers the whole day’s meals at good local restaurants (est.). Return to the shared private villa after dinner; the beach-club evening was yesterday, so no second club spend or daybed is included.", costInr: 950 }
+        ],
+        note: "Keep the instructor-led surf lesson, add a flexible private sunset transfer and good local food, then unwind at the villa instead of a resort."
+      }
     },
     {
       day: 9, placeId: "seminyak", title: "Seminyak brunch → DPS night flight → Bangalore", imgKey: "seminyak", imgI: 2,
@@ -287,7 +369,17 @@ window.BALI = {
         { t: "16:30", name: "Seminyak → DPS airport", desc: "Shared airport car allowance (est.); allow 1.5–2 hours and target terminal arrival at least three hours before departure.", costInr: 300, imgKey: "airplaneWindow", lat: -8.7467, lng: 115.1667 },
         { t: "21:30 WITA", name: "DPS → BLR night flight", desc: "Illustrative connection via KUL/SIN; target landing Mon 21 Jun 04:00–08:00 IST, subject to timetable. Return fare was already counted once in plan totals (est.); seasonal direct, if available, may change arrival time.", costInr: 0, imgKey: "airplaneWindow", lat: 13.1986, lng: 77.7066 }
       ],
-      sleep: { name: "Overnight flight; BLR arrival Mon 21 Jun (verify)", type: "flight", priceInr: 0 }, ppCost: 1150
+      sleep: { name: "Overnight flight; BLR arrival Mon 21 Jun (verify)", type: "flight", priceInr: 0 }, ppCost: 1150,
+      comfort: {
+        sleep: { name: "Overnight flight; BLR arrival Mon 21 Jun (verify)", type: "flight", priceInr: 0 },
+        ppCost: 1600,
+        acts: [
+          { i: 0, name: "Check out and take a private car to Seminyak", desc: "Pre-book a car for the three friends: ₹750 ÷3 = ₹250 pp (est.). Arrange staffed luggage storage or keep bags with you; this remains a zero-night Seminyak stop, not another villa booking.", costInr: 250 },
+          { i: 1, name: "Local-restaurant brunch and Kayu Aya browsing", desc: "₹950 is the complete day’s food allowance (est.), including an airport meal. Pick a well-rated local restaurant, not a resort brunch; shopping and premium drinks remain separate.", costInr: 950 },
+          { i: 3, name: "Private airport transfer and checked-bag drop", desc: "Pre-booked car ₹1,200 ÷3 = ₹400 pp (est.), with agreed tolls, parking and luggage capacity. Leave by 16:30, allow up to two hours and arrive three hours before departure. The 20 kg checked bag is prepaid once in Comfort extras, not charged again today; confirm allowance on every connection.", costInr: 400 }
+        ],
+        note: "Private transfers and a pre-booked 20 kg checked bag in extras keep the flight day easy; no ninth hotel night or duplicate baggage fee is added."
+      }
     }
   ],
   visa: {
@@ -297,7 +389,7 @@ window.BALI = {
     url: "https://molina.imigrasi.go.id"
   },
   essentials: {
-    sim: "Telkomsel physical SIM or compatible eSIM: ₹500 budget / ₹700 midrange (est.). Register correctly with passport details at an authorised seller; confirm data allowance, tethering and Penida coverage.",
+    sim: "Telkomsel physical SIM or compatible eSIM: ₹500 budget / ₹700 Comfort (est.). Register correctly with passport details at an authorised seller; confirm data allowance, tethering and Penida coverage.",
     money: "Planning rate: INR 1 ≈ IDR 190; USD 1 ≈ INR 84. Carry small rupiah notes for warungs and entrance fees; use bank ATMs, check fees and reject unwanted dynamic currency conversion. Budget prices are estimates, not live quotes; card/FX charges may use the contingency reserve.",
     plug: "Types C/F, about 230 V / 50 Hz; carry a suitable adapter for Indian plugs.",
     apps: ["Grab", "Gojek", "Google Maps (offline Bali)", "Google Translate (offline Indonesian)", "WhatsApp"]

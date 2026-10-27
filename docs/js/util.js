@@ -114,7 +114,7 @@
     const dailySum = daily.stay + daily.food + daily.transport + daily.activities;
     const extras = (D.extras || []).reduce((s, e) => s + (typeof e.v === "number" ? e.v : e.v[style]), 0);
     const f = cheapestFlight(D.id, origin, month);
-    const flight = includeFlights && f ? (style === "budget" ? f.low : f.typical) : 0;
+    const flight = includeFlights && f ? f.low : 0; // both plans fly the same sale fare; Comfort adds a checked bag in extras
     const parts = {
       flights: flight,
       stay: daily.stay * days,
