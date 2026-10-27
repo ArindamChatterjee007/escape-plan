@@ -440,9 +440,11 @@
     const D = DESTS()[destId]; const order = D ? D.places.map((p) => p.id) : [];
     return (window.CLIPS || []).filter((c) => c.dest === destId).slice().sort((a, b) => order.indexOf(a.place) - order.indexOf(b.place));
   }
-  APP.openCinema = (destId, i = 0) => {
+  APP.openCinema = (destId, which = 0) => {
     const el = cinemaEl();
-    CIN.dest = destId; CIN.list = clipList(destId); CIN.i = U.clamp(i, 0, Math.max(CIN.list.length - 1, 0));
+    CIN.dest = destId; CIN.list = clipList(destId);
+    const idx = typeof which === "string" ? CIN.list.findIndex((c) => c.id === which) : Number(which);
+    CIN.i = U.clamp(idx < 0 ? 0 : idx, 0, Math.max(CIN.list.length - 1, 0));
     if (!CIN.list.length) { U.toast("No clips for this destination yet"); return; }
     el.classList.add("open"); document.body.style.overflow = "hidden"; sfx("whoosh");
     renderRail(); loadClip(false, true);

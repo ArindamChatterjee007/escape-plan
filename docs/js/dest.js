@@ -302,7 +302,7 @@
           ${chip("🚫 ad-free", "accent")}${chip("🎬 " + clips.length + " clips")}${chip("⌨️ space · ← → · F · M")}
         </div>
         <div class="yt-grid stagger">
-          ${byPlace.map(({ p, cs }) => { const c = cs[0]; const i = clips.indexOf(c); return `<div class="yt clip" data-cinema="${D.id}" data-cinema-i="${i}" role="button" tabindex="0" aria-label="Play ${h(p.name)} clips">
+          ${byPlace.map(({ p, cs }) => { const c = cs[0]; return `<div class="yt clip" data-cinema="${D.id}" data-cinema-id="${c.id}" role="button" tabindex="0" aria-label="Play ${h(p.name)} clips">
             <img src="${c.poster}" alt="${h(c.title)}" loading="lazy" data-tags="${h(p.name)}">
             <video class="peek" muted playsinline loop preload="none" src="${c.src}" aria-hidden="true"></video>
             <div class="play"><i>▶</i></div>
@@ -525,7 +525,7 @@
 
   function initVideos(D, panel) {
     panel.querySelectorAll("[data-cinema]").forEach((n) => {
-      const open = () => window.APP && APP.openCinema(n.dataset.cinema, Number(n.dataset.cinemaI || 0));
+      const open = () => window.APP && APP.openCinema(n.dataset.cinema, n.dataset.cinemaId || Number(n.dataset.cinemaI || 0));
       n.addEventListener("click", open);
       n.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
       const peek = n.querySelector("video.peek");
