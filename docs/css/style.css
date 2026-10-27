@@ -817,3 +817,7 @@ a.tip { text-decoration: none; display: block; }
   .act.has-th { grid-template-columns: 70px 48px 1fr; }
   .act .cost { grid-column: 3; text-align: right; }
 }
+
+/* Anchored sections land below the sticky nav (+ subnav inside destination panels) */
+#plan, #compare, #combo, #choose { scroll-margin-top: calc(var(--nav-h) + 30px); }
+[role="tabpanel"] section[id] { scroll-margin-top: calc(var(--nav-h) + 96px); }

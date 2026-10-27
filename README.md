@@ -6,11 +6,25 @@
 
 An interactive, animated trip planner for a group of friends flying from Bangalore or Kolkata to **Vietnam** (10 days) or **Bali** (9 days) — or both. It answers: *where, when exactly, how many days, and how much per head including return flights*, with a live map, day-by-day itinerary, stays, food, verified vlogs and deals.
 
+## Screenshots (captured by the CI tests)
+| Overview | THE PLAN card |
+|---|---|
+| ![Overview](docs/assets/screenshots/01-overview-hero.jpg) | ![The plan](docs/assets/screenshots/02-the-plan.jpg) |
+
+| Vietnam route map | Day-by-day itinerary |
+|---|---|
+| ![Map](docs/assets/screenshots/04-vietnam-map.jpg) | ![Itinerary](docs/assets/screenshots/05-vietnam-itinerary.jpg) |
+
+| Cinema video player | Bali dashboard & calculator |
+|---|---|
+| ![Cinema](docs/assets/screenshots/06-bali-cinema.jpg) | ![Dashboard](docs/assets/screenshots/07-bali-dashboard.jpg) |
+
 ## What's inside
 | Path | Purpose |
 |------|---------|
 | `docs/` | The website (GitHub Pages serves this folder from `main`). No build step. |
 | `docs/data/*.js` | All content: flights, Vietnam, Bali, verified images & videos. Edit these to update prices. |
+| `docs/assets/screenshots/` | Screenshots from the CI run (for this README) |
 | `docs/js/` | `sound.js` (WebAudio SFX), `images.js` (image resolver/self-heal), `util.js` (state + cost model), `dest.js` (destination renderer), `app.js` (app boot) |
 | `docs/css/style.css` | Design system (dark, glass, aurora, motion) |
 | `research/` | Markdown research & the one-page decision summary |

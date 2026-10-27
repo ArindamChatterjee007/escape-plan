@@ -388,10 +388,11 @@
       }).join("");
       box.querySelectorAll(".wx").forEach((b) => b.addEventListener("click", () => {
         const idx = U.MONTHS.indexOf(b.dataset.month);
-        s.startDate[D.id] = firstSat(2027, idx);
+        const recommended = monthOf(D.plan.start) === b.dataset.month;
+        s.startDate[D.id] = recommended ? D.plan.start : firstSat(2027, idx);
         q("[data-date=start]").value = s.startDate[D.id];
         window.SFX && SFX.pop();
-        U.toast(`Start moved to ${U.fmtDate(new Date(s.startDate[D.id] + "T00:00:00"))} — first Saturday of ${b.dataset.month}`);
+        U.toast(`Start moved to ${U.fmtDate(new Date(s.startDate[D.id] + "T00:00:00"))} — ${recommended ? "our recommended date" : "first Saturday of " + b.dataset.month}`);
         update();
       }));
     }

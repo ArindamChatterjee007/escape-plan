@@ -366,7 +366,7 @@
     $(".cin-bg", el).style.backgroundImage = `url(${v.thumb})`;
     $(".cin-label", el).textContent = g.label; $(".cin-title", el).textContent = v.title;
     $(".cin-meta", el).innerHTML = `<span>${h(v.channel)}</span> · <a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">Open on YouTube ↗</a>${v.channelUrl ? ` · <a href="${v.channelUrl}" target="_blank" rel="noopener">Channel ↗</a>` : ""} · <span class="tiny">${CIN.i + 1}/${vids.length}</span>`;
-    $(".cin-list", el).innerHTML = vids.map((x, j) => `<button class="cin-item ${j === CIN.i ? "active" : ""}" data-j="${j}"><img src="${x.thumb}" alt="" loading="lazy"><div><b>${h(x.title)}</b><span>${h(x.channel)}</span></div></button>`).join("");
+    $(".cin-list", el).innerHTML = vids.map((x, j) => `<button class="cin-item ${j === CIN.i ? "active" : ""}" data-j="${j}"><img src="${x.thumb}" alt="" decoding="async"><div><b>${h(x.title)}</b><span>${h(x.channel)}</span></div></button>`).join("");
     $$(".cin-item", el).forEach((b) => b.addEventListener("click", () => { CIN.i = Number(b.dataset.j); CIN.playing = true; showCinema(); }));
     const frame = $(".cin-frame", el); frame.innerHTML = "";
     el.classList.toggle("playing", CIN.playing);
