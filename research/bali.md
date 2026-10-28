@@ -401,3 +401,40 @@ Third-party web-search results were used only as a limited price-range sanity ch
 ## Data consistency
 
 The matching browser dataset is `docs/data/bali.js`: five places, eight total nights, nine itinerary days, three or more stays and six to eight activities per place. Monetary fields stay numeric for the renderer; neighbouring descriptions and this document mark prices as estimates. The headline uses nine daily allowances plus all listed extras plus one return flight, while the itinerary receipts exclude prepaid international fares and one-off extras. Do not add the entire optional activity/transport catalog to the itinerary total.
+
+## 🛏️ Comfort plan (the second of the two plans on the site)
+
+Private rooms or a pool villa split by 3, a driver on touring days — smart spending, not luxury.
+
+- Private guesthouse rooms / 2-bed pool villa ÷3 (₹1,500–2,000 pp)
+- Private car + driver on Ubud, Penida and Uluwatu days (₹3,600 ÷ 3)
+- Nusa Penida private tour & fast boat, guided Batur sunrise
+- Sit-down local restaurants, one sunset dinner, one beach-club evening
+
+**Daily budget per person (est.):** stay ₹1,700 · food ₹950 · local transport ₹750 · activities ₹1300 = **₹4,700/day** (Budget plan: ₹2,950/day).
+
+**Comfort picks per place (per person per night, est.):**
+
+| Place | Comfort pick | pp/night | Budget pick | pp/night |
+|---|---|---:|---|---:|
+| Ubud | Nirvana Pension / central Ubud homestay | ₹1,600 | In Da Lodge | ₹800 |
+| Nusa Penida | Toya Pakeh private guesthouse — search target | ₹1,700 | Nuansa Penida Hostel | ₹900 |
+| Uluwatu | Padang Padang Inn | ₹1,800 | Padang Padang / Pecatu hostel dorm — search target | ₹900 |
+| Canggu | Canggu 2-bedroom private-pool villa — search target | ₹2,200 | Lay Day Surf Hostel | ₹900 |
+| Seminyak | Seminyak 2-bedroom private-pool villa — search target | ₹2,600 | Capsule Hotel New Seminyak | ₹800 |
+
+**What changes day by day in Comfort:**
+
+| Day | Sleep (Comfort) | pp cost Comfort / Budget | Upgrade |
+|---|---|---:|---|
+| 1 | Nirvana Pension / central Ubud homestay (private double) | ₹3,550 / ₹2,350 | A quiet private room, a pre-booked airport car and a 20 kg checked bag in extras make arrival easy without resort prices. |
+| 2 | Nirvana Pension / central Ubud homestay (private double) | ₹4,410 / ₹3,110 | An exclusive full-day driver lets us change stops freely; a private room and good local meals add comfort without luxury markups. |
+| 3 | Nirvana Pension / central Ubud homestay (private double) | ₹6,080 / ₹4,680 | A pre-arranged guide and private return pickup remove trek logistics, while the quiet room makes the recovery break worthwhile. |
+| 4 | Toya Pakeh private guesthouse — search target (private double) | ₹5,540 / ₹4,290 | Pre-booked fast boats, a private island tour and a harbour-side private room replace on-arrival logistics; transport and excursions are already in the daily spend. |
+| 5 | Padang Padang Inn (hotel) | ₹5,850 / ₹4,400 | Keep the good-value guided snorkel and fast boat, then upgrade to a private mainland transfer and a proper hotel room for an easy landing. |
+| 6 | Padang Padang Inn (hotel) | ₹5,100 / ₹3,000 | A private driver stays available through the temple, Kecak and dinner, while a value hotel keeps the upgrade practical rather than luxurious. |
+| 7 | Canggu 2-bedroom private-pool villa — search target (villa (÷3)) | ₹4,280 / ₹2,280 | A pool villa split three ways, one sunset dinner and one modest beach-club evening buy atmosphere without luxury daybed minimums. |
+| 8 | Canggu 2-bedroom private-pool villa — search target (villa (÷3)) | ₹5,850 / ₹4,050 | Keep the instructor-led surf lesson, add a flexible private sunset transfer and good local food, then unwind at the villa instead of a resort. |
+| 9 | Overnight flight; BLR arrival Mon 21 Jun (verify) (flight) | ₹1,600 / ₹1,150 | Private transfers and a pre-booked 20 kg checked bag in extras keep the flight day easy; no ninth hotel night or duplicate baggage fee is added. |
+
+**Per head, all-in (June, sale fares):** Budget ₹57,905 · Comfort ₹73,865 (est.).

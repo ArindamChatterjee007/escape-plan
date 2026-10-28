@@ -70,7 +70,7 @@ SGN→DPS is a **one-way** price; its seed target band is roughly **₹6,000–9
 | Bali, 8 funded days | 8 × ₹2,950 = ₹23,600 (est.) | 8 × ₹5,300 = ₹42,400 (est.) |
 | Vietnam visa + Bali VoA/levy + combined SIM allowance | ₹2,100 + ₹3,400 + ₹700 = ₹6,200 (est.) | ₹6,200 (est.) |
 | All five flights | ₹29,600 (est.) | ₹44,800 (est.) |
-| **Core per head** | **₹82,400 (est.)** | **₹1,34,400 (est.)** |
+| **Core per head** | **₹82,400 (est.)** | **₹1,11,700 (est.)** |
 | **Core group of 3** | **₹2,47,200 (est.)** | **₹4,03,200 (est.)** |
 | Insurance + approximately 8% core contingency | ₹1,200 + ₹6,600 (est.) | ₹1,800 + ₹10,800 (est.) |
 | **Practical reserve per head** | **₹90,200 (est.)** | **₹1,47,000 (est.)** |

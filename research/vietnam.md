@@ -283,3 +283,42 @@ Key dates: Indian school holidays end ~14 Jun (fares ease); Vietnamese summer do
 | Coordinates | as listed | TASK.md §8 seed + Google Maps search (`https://www.google.com/maps/search/?api=1&query=<lat>,<lng>`) |
 
 Flight **schedules** (06:30 / 20:30) are illustrative for a 2027 timetable that isn't published yet; only the Sat/Mon dates and the open-jaw routing are design decisions.
+
+## 🛏️ Comfort plan (the second of the two plans on the site)
+
+Proper private rooms and zero hassle — still smart spending, not luxury.
+
+- Private double/twin in 3★ or boutique homestays (₹1,200–1,500 pp)
+- Grab cars & private airport transfers, split by 3
+- Guided Cu Chi / Mekong / Lan Hạ overnight cruise upgrade
+- Sit-down local restaurants, cafés, one skybar night
+
+**Daily budget per person (est.):** stay ₹1,300 · food ₹800 · local transport ₹450 · activities ₹1100 = **₹3,650/day** (Budget plan: ₹2,300/day).
+
+**Comfort picks per place (per person per night, est.):**
+
+| Place | Comfort pick | pp/night | Budget pick | pp/night |
+|---|---|---:|---|---:|
+| Hanoi | Hanoi Emerald Waters Hotel Trendy — private double | ₹1,300 | Nexy Hostel | ₹600 |
+| Ninh Bình | Tam Coc Horizon Bungalow — paddy-view double | ₹1,250 | Tam Cốc backpacker dorm | ₹500 |
+| Ha Long / Lan Hạ Bay | 3-star Hạ Long / Lan Hạ overnight cruise | ₹9,000 | Budget 2D1N Lan Hạ cruise — twin cabin (fare incl. meals, kayak, fees) | ₹6,000 |
+| Đà Nẵng | Grand Sunrise Boutique Hotel — private double | ₹1,250 | Memory Hostel | ₹600 |
+| Hội An | Cozy Savvy Boutique Hotel — private double | ₹1,250 | Tribee Bana | ₹550 |
+| Ho Chi Minh City | Cochin Sang Hotel — private double | ₹1,350 | The Common Room Project | ₹650 |
+
+**What changes day by day in Comfort:**
+
+| Day | Sleep (Comfort) | pp cost Comfort / Budget | Upgrade |
+|---|---|---:|---|
+| 1 | Hanoi Emerald Waters Hotel Trendy (private double ÷ 2) (private double) | ₹2,670 / ₹1,720 | Private airport transfer and a boutique Old Quarter double instead of Bus 86 + a dorm — arrive rested with the 20 kg bag checked, and start the trip from a quiet AC room. |
+| 2 | Hanoi Emerald Waters Hotel Trendy (private double ÷ 2) (private double) | ₹3,600 / ₹2,320 | Same sights, but Grab between them, and lunch and dinner at proper sit-down Hanoi institutions instead of stools — the afternoon break is in an AC café, not a dorm. |
+| 3 | Tam Coc Horizon Bungalow (paddy-view double ÷ 2) (private double) | ₹3,890 / ₹3,090 | Same limousine van and the same Tràng An boat; the upgrade is a pool bungalow for the afternoon heat, a ride instead of a cycle to Hang Múa and two proper meals. |
+| 4 | 3★ Lan Hạ overnight cruise — balcony twin cabin (in the fare) (cruise cabin) | ₹10,000 / ₹6,800 | The one real splurge of Comfort: a smaller 3★ boat with a balcony cabin instead of the budget twin cabin — about ₹3,000 more for the best night of the trip, and it sits inside the Comfort total rather than as a top-up. |
+| 5 | Cozy Savvy Boutique Hotel (private double ÷ 2) (private double) | ₹5,050 / ₹3,550 | A long transfer day made painless: cruise-to-airport car, a better-timed flight with a checked bag, and a boutique Hội An double with a pool waiting at 22:00. |
+| 6 | Cozy Savvy Boutique Hotel (private double ÷ 2) (private double) | ₹3,900 / ₹2,450 | Beach club instead of a shack, a guide for the Ancient Town so nobody reads plaques in 34 °C, and a proper riverside dinner after the lantern boat. |
+| 7 | Grand Sunrise Boutique Hotel (private double ÷ 2) (private double) | ₹2,880 / ₹1,680 | A car that waits at the Marble Mountains instead of a Grab gamble, a 3★ pool hotel a short walk from Mỹ Khê, and a sit-down seafood dinner. |
+| 8 | Grand Sunrise Boutique Hotel (private double ÷ 2) (private double) | ₹4,550 / ₹3,250 | The easy-rider loop stays — it is the best way over the pass — but the afternoon and evening become AC car, riverside restaurant and the one skybar night of the trip. |
+| 9 | Cochin Sang Hotel (private double ÷ 2) (private double) | ₹5,170 / ₹3,810 | Grab car instead of Bus 109 with bags, a 3★ District 1 double to hide from the 16:00 downpour, and a real Saigon dinner before Bùi Viện. |
+| 10 | Home — flight lands ~22:30 IST (flight) | ₹2,500 / ₹1,950 | Small-group Củ Chi with hotel pickup instead of the big bus, and a Grab car to the airport with the checked bag — the travel-day hassle removed. |
+
+**Per head, all-in (June, sale fares):** Budget ₹49,175 · Comfort ₹64,825 (est.).

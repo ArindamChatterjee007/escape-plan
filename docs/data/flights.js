@@ -166,8 +166,8 @@ window.FLIGHTS = {
       { from: "SGN", to: "DPS", airline: "VietJet nonstop (22 Jun, est.)", lowInr: 7000, typicalInr: 11000, hrs: 4.1, est: true },
       { from: "DPS", to: "BLR", airline: "IndiGo nonstop / AirAsia via KUL (29 Jun, est.)", lowInr: 11000, typicalInr: 16000, hrs: 6.5, est: true }
     ],
-    days: 18, perHeadBudget: 82400, perHeadMid: 134400, savingVsTwoTrips: 12725, est: true,
-    note: "Core per head (est.): 10 × ₹2,300 Vietnam + 8 × ₹2,950 Bali + ₹6,200 visas/levy/SIMs + ₹29,600 for all five flights = ₹82,400 budget, ₹1,34,400 mid-range with typical fares. Add insurance and a buffer. One set of long-haul flights saves ~₹12,700 vs two separate trips. Starts Kolkata, ends Bangalore."
+    days: 18, perHeadBudget: 82400, perHeadMid: 111700, savingVsTwoTrips: 12725, est: true,
+    note: "Core per head (est.): 10 × ₹2,300 Vietnam + 8 × ₹2,950 Bali + ₹6,200 visas/levy/SIMs + ₹29,600 for all five flights = ₹82,400 on the Budget plan; ₹1,11,700 on the Comfort plan (private rooms, drivers, guided days, checked bag — same sale fares). Add insurance and a buffer. One set of long-haul flights saves ~₹12,700 vs two separate trips. Starts Kolkata, ends Bangalore."
   },
   tips: [
     { ic: "🔔", t: "Set alerts now, buy on a sale", d: "Track BLR and CCU on Google Flights with ±3-day grids. Nov 2026 – Jan 2027 is the usual buying window for June travel (VietJet weekend sales, IndiGo quarterly sales). Treat every price here as an estimate until you see a live quote." },

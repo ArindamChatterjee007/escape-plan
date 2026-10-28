@@ -31,7 +31,7 @@ An interactive, animated trip planner for a group of friends flying from Bangalo
 | `docs/assets/screenshots/` | Screenshots from the CI run (for this README) |
 | `docs/js/` | `sound.js` (WebAudio SFX), `images.js` (image resolver/self-heal), `util.js` (state + cost model), `dest.js` (destination renderer), `app.js` (app boot) |
 | `docs/css/style.css` | Design system (dark, glass, aurora, motion) |
-| `research/` | Markdown research & the one-page decision summary |
+| `research/` | Markdown research: one-page decision summary, when-to-go analysis, flights, Vietnam, Bali, comparison |
 | `tests/`, `playwright.config.js` | Data validation, link checks and Playwright end-to-end tests (GitHub Actions) |
 | `TASK.md` | The original build brief / specification |
 
@@ -45,7 +45,7 @@ An interactive, animated trip planner for a group of friends flying from Bangalo
 **🎒 Budget** (dorms, street food, buses) and **🛏️ Comfort** (proper private rooms, Grab/private driver, guided days — smart spending, not luxury) are two complete plans behind one switch: every day's room, transport and per-head cost changes, stays re-rank to the plan's picks, and THE PLAN card shows both totals side by side.
 
 ## When to go
-A month-by-month analysis of 2027 (flight price index, weather, crowds, holidays) with the cheapest departure days per month, the best month and the months to avoid — see the "When to go" section and `docs/data/months.js`.
+A month-by-month analysis of 2027 (flight price index, weather, crowds, holidays) with the cheapest departure days per month, the best month and the months to avoid — see the "When to go" section on the site, [research/when-to-go.md](research/when-to-go.md) and `docs/data/months.js`.
 
 ## Video: ad-free by design
 The site never embeds YouTube. The cinema plays **46 free-licence clips** (Pexels / Mixkit) of the exact places on the route in **our own HTML5 player** — custom controls, scrubbing, HD toggle, speed, picture-in-picture, fullscreen, keyboard shortcuts, ambient glow and autoplay-next — so there are **no ads, ever**. Creator vlogs are offered only as outbound "watch on YouTube" links.

@@ -109,7 +109,7 @@ Vietnam wins when the priority is the lowest funded trip cost, street food and v
 
 ## Combo: a different product, not a like-for-like discount
 
-**12–29 Jun, 18 days:** 10 Vietnam days + 8 Bali days. The mandated core formula yields **₹82,400 budget / ₹1,34,400 mid per head (est.)**, including five flights, visas/levy and a combined SIM allowance; group of 3 is **₹2,47,200 / ₹4,03,200 (est.)**. With an explicit insurance/contingency reserve, fund **₹90,200 / ₹1,47,000 per head (est.)**. Full arithmetic and assumptions are in [flights](flights.md).
+**12–29 Jun, 18 days:** 10 Vietnam days + 8 Bali days. The mandated core formula yields **₹82,400 budget / ₹1,11,700 mid per head (est.)**, including five flights, visas/levy and a combined SIM allowance; group of 3 is **₹2,47,200 / ₹4,03,200 (est.)**. With an explicit insurance/contingency reserve, fund **₹90,200 / ₹1,47,000 per head (est.)**. Full arithmetic and assumptions are in [flights](flights.md).
 
 The **₹12,725 saving (est.)** is a **flights-only** comparison with two separate return journeys on the specified standalone dates, keeping domestic flights and 10+8 ground days equal. It is not the difference versus two complete 10+9-day trips. The combo finishes at BLR after starting at CCU, overlaps the start of Indonesian school holidays, and needs its own baggage, insurance and ground-upgrade quotes.
 

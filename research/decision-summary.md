@@ -67,7 +67,7 @@ On the site the switch is in each destination's header and in the calculator; ev
 ## ✈️ Later / longer: the combo · Sat 12 Jun → Tue 29 Jun 2027 (18 days)
 
 CCU → HAN → (HAN→DAD, DAD→SGN) → SGN→DPS → DPS→BLR. Vietnam 12–21 Jun (10 d), Bali 22–29 Jun (8 d).
-**Core per head: ₹82,400 budget / ₹1,34,400 mid** (flights ₹29,600 + 10 × ₹2,300 + 8 × ₹2,950 + visas/levy/SIMs ₹6,200). Add insurance and a buffer (≈ +₹8,000). One set of long-haul flights saves ≈ ₹12,700 vs two separate trips. Starts Kolkata, ends Bangalore.
+**Core per head: ₹82,400 Budget plan / ₹1,11,700 Comfort plan** (Budget: flights ₹29,600 + 10 × ₹2,300 + 8 × ₹2,950 + visas/levy/SIMs ₹6,200; Comfort: same flights + 10 × ₹3,650 + 8 × ₹4,700 + extras + checked bag). Add insurance and a buffer (≈ +₹8,000). One set of long-haul flights saves ≈ ₹12,700 vs two separate trips. Starts Kolkata, ends Bangalore.
 
 ---
 
